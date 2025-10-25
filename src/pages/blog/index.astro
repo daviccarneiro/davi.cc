@@ -1,0 +1,54 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// 1. Buscar todos os posts da coleção 'blog'
+const allPosts = await getCollection('blog');
+
+// Opcional: Ordenar os posts pela data de publicação (do mais novo para o mais antigo)
+allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title="Blog - davi.cc">
+  <main>
+    <h1>Meu Blog</h1>
+    <p>Aqui compartilho meus projetos, aprendizados e ideias.</p>
+    
+    <ul>
+      {allPosts.map((post) => (
+        <li>
+          <a href={`/blog/${post.slug}/`}>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+  </main>
+</Layout>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    margin-bottom: 1.5rem;
+    border: 1px solid #eee;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  li a {
+    text-decoration: none;
+    color: #333;
+  }
+  li h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #007bff;
+  }
+  li p {
+    margin: 0;
+  }
+</style>

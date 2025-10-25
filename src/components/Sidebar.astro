@@ -1,0 +1,122 @@
+---
+// src/components/Sidebar.astro
+
+// Em breve, podemos otimizar esta imagem como fizemos com a do post
+const myProfilePic = "/images/profile-placeholder.jpg"; 
+// (Você precisará colocar uma imagem de placeholder em 'public/images/profile-placeholder.jpg' por enquanto)
+---
+
+<aside class="sidebar">
+  <div class="card">
+    <a href="/" class="profile-pic-link">
+      <img src={myProfilePic} alt="Davi Carneiro" class="profile-pic" />
+    </a>
+    <h1>Davi Carneiro</h1>
+    <h2>Professor e Desenvolvedor</h2>
+
+    <nav class="main-nav">
+      <a href="/">Início</a>
+      <a href="/sobre">Sobre</a>
+      <a href="/blog">Blog</a>
+    </nav>
+
+    <nav class="social-nav">
+      <a href="https://github.com/..." target="_blank">GitHub</a>
+      <a href="https://linkedin.com/..." target="_blank">LinkedIn</a>
+      <a href="https://x.com/..." target="_blank">X</a>
+      <a href="https://researchgate.net/..." target="_blank">ResearchGate</a>
+    </nav>
+  </div>
+</aside>
+
+<style>
+  .sidebar {
+    /* Fixo à esquerda */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px; /* Largura do seu card */
+    height: 100vh; /* Altura total da tela */
+    
+    /* Estilos do "card" */
+    background: #f8f8f8;
+    border-right: 1px solid #e0e0e0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    /* Permite rolagem interna se o conteúdo for muito grande */
+    overflow-y: auto; 
+  }
+
+  .profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 0.5rem 0 0.25rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #555;
+    margin: 0 0 1.5rem;
+  }
+
+  .main-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .main-nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 0.5rem;
+    border-radius: 5px;
+  }
+  .main-nav a:hover {
+    background: #e9e9e9;
+  }
+
+  .social-nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  .social-nav a {
+    text-decoration: none;
+    color: #777;
+    font-weight: 500;
+  }
+  .social-nav a:hover {
+    color: #007bff;
+  }
+
+  /* --- Layout Mobile --- */
+  @media (max-width: 768px) {
+    .sidebar {
+      /* No mobile, o sidebar vira um header fixo no topo */
+      position: static;
+      width: 100%;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    /* (Depois podemos re-adicionar o 'hamburger'
+       aqui para esconder os menus no mobile) */
+  }
+</style>

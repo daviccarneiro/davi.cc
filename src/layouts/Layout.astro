@@ -1,0 +1,62 @@
+---
+import { ViewTransitions } from 'astro:transitions'; // 1. IMPORTAR ViewTransitions
+import Sidebar from '../components/Sidebar.astro';   // 2. IMPORTAR Sidebar
+
+interface Props {
+	title: string;
+}
+const { title = "Portfólio" } = Astro.props;
+
+// 3. REMOVEMOS a importação do 'Header.astro'
+---
+
+<!doctype html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+
+    <ViewTransitions /> </head>
+	<body>
+    <Sidebar transition:persist />
+
+    <main>
+      <slot />
+    </main>
+	</body>
+</html>
+
+<style is:global>
+  /* Reset básico */
+  :root {
+    --sidebar-width: 300px;
+  }
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+  }
+  h1, h2, h3, p {
+    margin: 0;
+  }
+
+  /*
+   7. A MÁGICA DO LAYOUT:
+   Empurramos o <main> para a direita,
+   exatamente a largura da sidebar.
+  */
+  main {
+    margin-left: var(--sidebar-width);
+    padding: 2rem;
+  }
+
+  /* --- Layout Mobile --- */
+  @media (max-width: 768px) {
+    main {
+      /* No mobile, o 'margin-left' é removido
+         pois a sidebar está no topo (como definimos no passo 16) */
+      margin-left: 0;
+    }
+  }
+</style>

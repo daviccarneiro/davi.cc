@@ -1,0 +1,104 @@
+---
+// Não precisamos de código no frontmatter por enquanto
+---
+
+<header>
+  <a href="/" class="logo">davi.cc</a>
+
+  <button id="menu-toggle" class="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav id="menu-nav">
+    <a href="/">Início</a>
+    <a href="/sobre">Sobre</a>
+    <a href="/blog">Blog</a>
+  </nav>
+</header>
+
+<style>
+  header {
+    background: #f4f4f4;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  nav a:hover {
+    color: #007bff;
+  }
+
+  .hamburger {
+    display: none; /* Escondido por padrão no desktop */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 5px 0;
+    transition: 0.3s;
+  }
+
+  /* --- Estilos Mobile --- */
+  @media (max-width: 768px) {
+    nav {
+      display: none; /* Menu escondido no mobile */
+      position: absolute;
+      top: 60px; /* Altura do seu header */
+      left: 0;
+      right: 0;
+      background: #f4f4f4;
+      flex-direction: column;
+      width: 100%;
+      text-align: center;
+      padding: 1rem 0;
+      gap: 1rem;
+    }
+
+    nav.is-open {
+      display: flex; /* Classe que o JS vai adicionar */
+    }
+
+    .hamburger {
+      display: block; /* Hamburger aparece no mobile */
+    }
+  }
+</style>
+
+<script>
+  // Pega o botão e o menu pelos seus IDs
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuNav = document.getElementById('menu-nav');
+
+  if (menuToggle && menuNav) {
+    menuToggle.addEventListener('click', () => {
+      menuNav.classList.toggle('is-open');
+    });
+  }
+</script>
