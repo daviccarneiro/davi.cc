@@ -1,104 +1,170 @@
 ---
-// Não precisamos de código no frontmatter por enquanto
+import { Image } from 'astro:assets';
+import ThemeToggle from './ThemeToggle.astro';
+import { Icon } from 'astro-icon/components';
+import myProfilePic from "../assets/davi.jpg";
 ---
 
-<header>
-  <a href="/" class="logo">davi.cc</a>
+<header class="mobile-header">
+  <a href="/" class="brand" aria-label="Página inicial">
+    <Image
+      src={myProfilePic}
+      alt="Davi Carneiro"
+      width={32}
+      height={32}
+      format="webp"
+      class="avatar"
+    />
+  </a>
 
-  <button id="menu-toggle" class="hamburger">
+  <a href="/" class="title">Davi Carneiro</a>
+
+  <button id="menu-toggle" class="hamburger" aria-label="Abrir menu" aria-controls="mobile-menu" aria-expanded="false">
     <span></span>
     <span></span>
     <span></span>
   </button>
-
-  <nav id="menu-nav">
-    <a href="/">Início</a>
-    <a href="/sobre">Sobre</a>
-    <a href="/blog">Blog</a>
-  </nav>
 </header>
 
+<nav id="mobile-menu" class="mobile-menu" aria-label="Menu principal">
+  <a href="/">Início</a>
+  <a href="/blog">Blog</a>
+  <div class="social-row">
+    <a href="https://github.com/..." target="_blank" rel="noopener noreferrer" aria-label="Github"><Icon name="mdi:github" /></a>
+    <a href="https://linkedin.com/..." target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Icon name="mdi:linkedin" /></a>
+    <a href="https://x.com/..." target="_blank" rel="noopener noreferrer" aria-label="X"><Icon name="mdi:twitter" /></a>
+    <a href="https://researchgate.net/..." target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><Icon name="mdi:school-outline" /></a>
+    <a href="https://lattes.cnpq.br/..." target="_blank" rel="noopener noreferrer" aria-label="Lattes"><Icon name="mdi:account-box-outline" /></a>
+    <div class="spacer"></div>
+    <ThemeToggle />
+  </div>
+</nav>
+
 <style>
-  header {
-    background: #f4f4f4;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  /* Esconde no desktop, mostra apenas em telas pequenas */
+  .mobile-header {
+    display: none;
   }
 
-  .logo {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    font-size: 1.2rem;
+  .mobile-menu {
+    display: none;
   }
 
-  nav {
-    display: flex;
-    gap: 1.5rem;
-  }
-
-  nav a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-  }
-  nav a:hover {
-    color: #007bff;
-  }
-
-  .hamburger {
-    display: none; /* Escondido por padrão no desktop */
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-  }
-
-  .hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: #333;
-    margin: 5px 0;
-    transition: 0.3s;
-  }
-
-  /* --- Estilos Mobile --- */
   @media (max-width: 768px) {
-    nav {
-      display: none; /* Menu escondido no mobile */
-      position: absolute;
-      top: 60px; /* Altura do seu header */
-      left: 0;
-      right: 0;
-      background: #f4f4f4;
-      flex-direction: column;
-      width: 100%;
-      text-align: center;
-      padding: 1rem 0;
-      gap: 1rem;
+    .mobile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
     }
 
-    nav.is-open {
-      display: flex; /* Classe que o JS vai adicionar */
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      border: 2px solid var(--color-bg);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    }
+
+    .title {
+      color: var(--color-text);
+      text-decoration: none;
+      font-weight: 600;
     }
 
     .hamburger {
-      display: block; /* Hamburger aparece no mobile */
+      background: none;
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      padding: 0.375rem;
+      cursor: pointer;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+    .hamburger span {
+      width: 22px;
+      height: 2px;
+      background-color: var(--color-text);
+    }
+
+    .mobile-menu {
+      position: absolute;
+      top: 56px; /* altura aproximada do header */
+      left: 0;
+      right: 0;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      display: none;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1rem;
+      z-index: 50;
+    }
+
+    .mobile-menu a {
+      color: var(--color-text);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem;
+      border-radius: var(--border-radius);
+    }
+    .mobile-menu a:hover {
+      background: var(--color-bg-hover);
+    }
+
+    .mobile-menu.is-open {
+      display: flex;
+    }
+
+    .social-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-top: 0.25rem;
+    }
+    .social-row a {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+    .social-row :global(svg) {
+      width: 24px;
+      height: 24px;
+    }
+    .social-row .spacer {
+      margin-left: auto;
+    }
+    .social-row :global(.theme-toggle) {
+      display: inline-flex;
     }
   }
 </style>
 
 <script>
-  // Pega o botão e o menu pelos seus IDs
-  const menuToggle = document.getElementById('menu-toggle');
-  const menuNav = document.getElementById('menu-nav');
+  const initMobileMenu = () => {
+    const toggleButton = document.getElementById('menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    if (!toggleButton || !menu) return;
+    // Usa onclick para evitar múltiplos handlers após transições
+    toggleButton.onclick = () => {
+      const isOpen = menu.classList.toggle('is-open');
+      toggleButton.setAttribute('aria-expanded', String(isOpen));
+    };
+  };
 
-  if (menuToggle && menuNav) {
-    menuToggle.addEventListener('click', () => {
-      menuNav.classList.toggle('is-open');
-    });
-  }
+  // Inicializa na carga e após transições
+  initMobileMenu();
+  document.addEventListener('astro:page-load', initMobileMenu);
+  document.addEventListener('astro:after-swap', initMobileMenu);
 </script>
+
+

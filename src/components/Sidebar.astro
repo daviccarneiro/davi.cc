@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle.astro';
 
 <aside class="sidebar">
   <div class="card">
-    <div> class="card-main"
+    <div class="card-main"> 
     <a href="/" class="profile-pic-link">
       <Image
         src={myProfilePic}
@@ -25,7 +25,6 @@ import ThemeToggle from './ThemeToggle.astro';
 
     <nav class="main-nav">
       <a href="/">Início</a>
-      <a href="/sobre">Sobre</a>
       <a href="/blog">Blog</a>
     </nav>
   </div>
@@ -36,6 +35,7 @@ import ThemeToggle from './ThemeToggle.astro';
       <a href="https://linkedin.com/..." target="_blank" aria-label="LinkedIn"><Icon name="mdi:linkedin"/></a>
       <a href="https://x.com/..." target="_blank" aria-label="X"><Icon name="mdi:twitter"/></a>
       <a href="https://researchgate.net/..." target="_blank" aria-label="ResearchGate"><Icon name="mdi:school-outline"/></a>
+      <a href="https://lattes.cnpq.br/..." target="_blank" aria-label="Lattes"><Icon name="mdi:account-box-outline"/></a>
     </nav>
   
     <ThemeToggle />
@@ -155,11 +155,7 @@ import ThemeToggle from './ThemeToggle.astro';
   /* --- Layout Mobile --- */
   @media (max-width: 768px) {
     .sidebar {
-      position: static;
-      width: 100%;
-      height: auto;
-      border-right: none;
-      border-bottom: 1px solid var(--color-border); /* <- USA VARIÁVEL */
+      display: none; /* Esconde completamente no mobile */
     }
   }
 </style>

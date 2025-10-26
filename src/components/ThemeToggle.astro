@@ -3,7 +3,7 @@
 import { Icon } from 'astro-icon/components';
 ---
 
-<button id="theme-toggle" aria-label="Mudar tema">
+<button class="theme-toggle" data-theme-toggle aria-label="Mudar tema">
   <span class="sun-icon">
     <Icon name="mdi:white-balance-sunny" />
   </span>
@@ -13,7 +13,7 @@ import { Icon } from 'astro-icon/components';
 </button>
 
 <style>
-  #theme-toggle {
+  .theme-toggle {
     background: none;
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
@@ -21,7 +21,7 @@ import { Icon } from 'astro-icon/components';
     cursor: pointer;
     color: var(--color-text);
   }
-  #theme-toggle:hover {
+  .theme-toggle:hover {
     background: var(--color-bg-hover);
   }
 
@@ -49,21 +49,3 @@ import { Icon } from 'astro-icon/components';
     height: 24px;
   }
 </style>
-
-<script>
-  // 1. Encontrar o botão
-  const toggleButton = document.getElementById('theme-toggle');
-
-  // 2. Adicionar o "ouvinte" de clique
-
-  toggleButton?.addEventListener('click', () => {
-    // 3. Alternar a classe 'dark' no <html>
-    document.documentElement.classList.toggle('dark');
-
-    // 4. Verificar o novo estado
-    const isDark = document.documentElement.classList.contains('dark');
-
-    // 5. Salvar a preferência no localStorage
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
-</script>

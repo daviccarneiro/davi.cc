@@ -1,6 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
 import Sidebar from '../components/Sidebar.astro';
+import Header from '../components/Header.astro';
 
 import '../styles/global.css'; 
 
@@ -41,10 +42,69 @@ const { title = "Portfólio" } = Astro.props;
     </script>
 
 	</head>
-	<body>
+  <body>
+    <Header />
     <Sidebar transition:persist />
-		<main>
+    <main>
       <slot />
     </main>
+
+    <script>
+      // --- Definição das Funções ---
+
+      // Função 1: APLICA o tema (agora em um 'documento' específico)
+      const applyTheme = (doc: Document) => {
+        const theme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        const root = doc.documentElement; // <html>
+        if (theme === 'dark' || (!theme && prefersDark)) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+      };
+
+      // (Função 2: handleThemeToggle, permanece a mesma)
+      const handleThemeToggle = () => {
+        document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      };
+      
+      // (Função 3: initThemeToggle, permanece a mesma)
+      const initThemeToggle = () => {
+        const buttons = document.querySelectorAll('[data-theme-toggle]');
+        buttons.forEach((btn) => {
+          btn.removeEventListener('click', handleThemeToggle);
+          btn.addEventListener('click', handleThemeToggle);
+        });
+      };
+
+      // (Removido) initMobileMenu agora vive no Header.astro
+
+      // --- Execução ---
+
+      // 1. Roda na CARGA INICIAL
+      initThemeToggle();
+      
+      // 2. Roda ANTES da troca de DOM (A NOVA SOLUÇÃO)
+      //    'e.newDocument' é o <html> da página que está chegando.
+      document.addEventListener('astro:before-swap', (e) => {
+        applyTheme(e.newDocument);
+      });
+
+      // 3. Roda DEPOIS que tudo terminou
+      document.addEventListener('astro:page-load', () => {
+        // Re-anexa o listener ao botão persistido
+        initThemeToggle();
+      });
+
+      // 4. Garante re-inicialização após a troca de DOM nas transições
+      document.addEventListener('astro:after-swap', () => {
+        initThemeToggle();
+      });
+    </script>
+
 	</body>
 </html>
