@@ -1,5 +1,23 @@
+# 1. Configuração de Pasta Pública
+# Informa ao CMS onde estão seus arquivos estáticos (ex: favicon)
+# No Astro, a pasta 'public' é tratada como a raiz.
+public_folder: public
+
+# 2. Configuração de Mídia Global
+# Define como o CMS lida com uploads de imagens para TODAS as coleções.
+media:
+  # 'path': Onde as novas imagens serão salvas.
+  # Para o z.image() do Astro, DEVE ser 'src/assets'.
+  path: src/assets
+  
+  # 'return_path': Como o caminho será salvo no arquivo .md
+  # 'relative_from_doc' é o que o z.image() do Astro espera.
+  # (Salvará como: ../../assets/minha-imagem.jpg)
+  return_path: relative_from_doc
+
+# 3. Lista de Coleções de Conteúdo
+# Este é o array que contém todas as suas seções de conteúdo.
 collections:
-  # --- Coleção de Blog ---
   - name: Blog
     # 'name' é o rótulo que aparece na interface do CMS
     
@@ -9,21 +27,7 @@ collections:
     can_create: true
     # Permite a criação de novos posts
     
-    # 1. A integração nativa com Astro (como mostrado no vídeo)
-    # Isto lê seu 'src/content/config.ts' diretamente.
+    # A integração nativa com Astro (como no vídeo)
+    # Isto lê 'src/content/config.ts' e gera os campos
+    # (title, description, pubDate, heroImage) automaticamente.
     schema: astro
-    
-    # 2. A configuração de mídia correta (como na documentação)
-    # Isto diz ao CMS como lidar com os uploads de arquivos
-    # especificamente para ESTA coleção.
-    media:
-      # 'path': Para onde as novas imagens devem ser enviadas.
-      # Para o 'z.image()' e o <Image /> do Astro,
-      # DEVEMOS usar 'src/assets'.
-      path: src/assets
-      
-      # 'return_path': O formato do caminho a ser salvo no .md
-      # 'relative_from_doc' é o que precisamos.
-      # Ele salvará o caminho como '../../assets/minha-imagem.jpg',
-      # que é exatamente o que o 'z.image()' espera.
-      return_path: relative_from_doc
