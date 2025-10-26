@@ -2,7 +2,7 @@
 # Define para onde o CMS deve enviar novas imagens.
 # Para que a otimização de imagens do Astro (<Image />) funcione,
 # elas DEVEM ser salvas dentro de 'src/assets'.
-media_folder: src/assets
+media: src/assets
 
 collections:
   # --- Coleção de Blog ---
