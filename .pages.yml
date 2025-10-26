@@ -1,63 +1,41 @@
-# Define o diretório que o CMS considera "público"
 public_path: public
 
-# Define suas coleções de conteúdo
 collections:
-  - name: Blog
-    # O nome "Blog" aparecerá na interface do CMS
-    
+  - name: blog
+    label: Blog
     path: src/content/blog
-    # O caminho para seus arquivos Markdown
-    
     data_type: frontmatter
-    # Informa ao CMS que os dados estão no frontmatter do YAML
-    
-    new_doc_ext: md
-    # Extensão padrão para novos documentos
-    
-    new_doc_slug: novo-post
-    # Slug (nome do arquivo) padrão para novos posts
-    
+    # caminho do arquivo ao criar novo doc (usa o slug digitado no CMS)
+    entry_path: "{slug}.md"
     can_create: true
-    # Permite criar novos posts
-    
     can_delete: true
-    # Permite deletar posts
 
-    # 'fields' define o formulário de edição para cada post.
-    # Deve espelhar seu 'src/content/config.ts'
     fields:
       - name: title
         label: Título
         type: text
         required: true
-        
+
       - name: description
         label: Descrição Curta
-        type: textarea # 'textarea' é melhor para descrições
+        type: textarea
         required: true
-        
+
       - name: pubDate
         label: Data de Publicação
-        type: datetime
+        type: date
         required: true
-        # Formato para salvar a data, espelhando o que você já usa
-        datetime_format: YYYY-MM-DD 
-        
+        save_format: "YYYY-MM-DD"
+
       - name: heroImage
         label: Imagem de Capa
-        type: image # Mudar para 'image'
+        type: image
         required: false
-        image_path: public/uploads/blog # Diz ao CMS para salvar uploads aqui
-        
-        # Esta é a configuração mais importante e complexa:
-        # 1. 'file_path': Diz ao CMS para ABRIR esta pasta no seletor de arquivos.
-        #    Como usamos a otimização '<Image />' do Astro, as imagens
-        #    PRECISAM estar em 'src/assets'.
+        # Seletor abre em src/assets e salva caminho relativo ao .md (compatível com image() do Astro)
         file_path: src/assets
-        
-        # 2. 'file_return_path': Diz ao CMS como salvar o caminho.
-        #    'relative_from_doc' salvará o caminho relativo
-        #    (ex: '../../assets/minha-imagem.jpg'), que é exatamente
-        #    o que o schema 'image()' do Astro espera.
         file_return_path: relative_from_doc
+
+      - name: body
+        label: Conteúdo
+        type: markdown
+        required: true
