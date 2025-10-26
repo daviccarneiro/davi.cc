@@ -1,0 +1,81 @@
+/* src/styles/global.css */
+
+/* 1. Variáveis do Modo Claro (Padrão) */
+:root {
+    color-scheme: light; /* Informa ao navegador o esquema de cores padrão */
+  
+    /* Cores */
+    --color-text: #222222;
+    --color-bg: #ffffff;
+    --color-primary: #007bff;
+    --color-border: #e0e0e0;
+    --color-bg-sidebar: #f8f8f8;
+    --color-bg-hover: #e9e9e9;
+  
+    /* ... (suas variáveis de fonte e layout não precisam mudar) ... */
+    --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family-mono: 'JetBrains Mono', monospace;
+    --sidebar-width: 300px;
+    --content-width: 720px;
+    --border-radius: 8px;
+  }
+  
+  /* 2. Variáveis do Modo Escuro (Quando html.dark existir) */
+  html.dark {
+    color-scheme: dark; /* Informa ao navegador que agora estamos no modo escuro */
+  
+    /* Sobrescrevemos as cores */
+    --color-text: #eeeeee;
+    --color-bg: #111111;
+    --color-primary: #389bff; /* Um azul um pouco mais claro para contraste */
+    --color-border: #333333;
+    --color-bg-sidebar: #1f1f1f;
+    --color-bg-hover: #333333;
+  }
+  
+  /* 3. Adicionar uma transição suave para as cores */
+  body {
+    font-family: var(--font-family-sans);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    margin: 0;
+    padding: 0;
+  
+    /* Esta é a mágica: transição suave ao trocar de tema */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-weight: 600;
+  }
+  
+  p {
+    margin: 0;
+    line-height: 1.7;
+  }
+  
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* 3. Estilos Globais do Layout */
+  main {
+    margin-left: var(--sidebar-width);
+    padding: 2rem 4rem;
+    max-width: var(--content-width);
+    margin: 0 auto 0 var(--sidebar-width); /* Centraliza o conteúdo */
+  }
+  
+  /* --- Layout Mobile --- */
+  @media (max-width: 768px) {
+    main {
+      margin-left: 0;
+      padding: 1.5rem;
+      max-width: 100%;
+    }
+  }

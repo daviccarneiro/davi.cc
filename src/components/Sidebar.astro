@@ -1,16 +1,25 @@
 ---
-// src/components/Sidebar.astro
-
-// Em breve, podemos otimizar esta imagem como fizemos com a do post
-const myProfilePic = "/images/profile-placeholder.jpg"; 
-// (Você precisará colocar uma imagem de placeholder em 'public/images/profile-placeholder.jpg' por enquanto)
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import myProfilePic from "../assets/davi.jpg"; 
+import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <aside class="sidebar">
   <div class="card">
+    <div> class="card-main"
     <a href="/" class="profile-pic-link">
-      <img src={myProfilePic} alt="Davi Carneiro" class="profile-pic" />
+      <Image
+        src={myProfilePic}
+        alt="Davi Carneiro"
+        class="profile-pic"
+        width={150}
+        height={150}
+        format='webp'
+        />
     </a>
+
+
     <h1>Davi Carneiro</h1>
     <h2>Professor e Desenvolvedor</h2>
 
@@ -19,35 +28,33 @@ const myProfilePic = "/images/profile-placeholder.jpg";
       <a href="/sobre">Sobre</a>
       <a href="/blog">Blog</a>
     </nav>
-
-    <nav class="social-nav">
-      <a href="https://github.com/..." target="_blank">GitHub</a>
-      <a href="https://linkedin.com/..." target="_blank">LinkedIn</a>
-      <a href="https://x.com/..." target="_blank">X</a>
-      <a href="https://researchgate.net/..." target="_blank">ResearchGate</a>
-    </nav>
   </div>
+
+  <footer class="card-footer">
+    <nav class="social-nav">
+      <a href="https://github.com/..." target="_blank" aria-label="Github"> <Icon name="mdi:github"/></a>
+      <a href="https://linkedin.com/..." target="_blank" aria-label="LinkedIn"><Icon name="mdi:linkedin"/></a>
+      <a href="https://x.com/..." target="_blank" aria-label="X"><Icon name="mdi:twitter"/></a>
+      <a href="https://researchgate.net/..." target="_blank" aria-label="ResearchGate"><Icon name="mdi:school-outline"/></a>
+    </nav>
+  
+    <ThemeToggle />
+    <footer/>
+  </div >
+
 </aside>
 
 <style>
   .sidebar {
-    /* Fixo à esquerda */
     position: fixed;
     top: 0;
     left: 0;
-    width: 300px; /* Largura do seu card */
-    height: 100vh; /* Altura total da tela */
-    
-    /* Estilos do "card" */
-    background: #f8f8f8;
-    border-right: 1px solid #e0e0e0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--color-bg-sidebar);
+    border-right: 1px solid var(--color-border);
     padding: 2rem;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    
-    /* Permite rolagem interna se o conteúdo for muito grande */
     overflow-y: auto; 
   }
 
@@ -55,7 +62,7 @@ const myProfilePic = "/images/profile-placeholder.jpg";
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    border: 5px solid #fff;
+    border: 5px solid var(--color-bg); /* <- USA VARIÁVEL */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 1rem;
   }
@@ -82,41 +89,77 @@ const myProfilePic = "/images/profile-placeholder.jpg";
 
   .main-nav a {
     text-decoration: none;
-    color: #333;
+    color: var(--color-text); /* <- USA VARIÁVEL */
     font-weight: 500;
     padding: 0.5rem;
-    border-radius: 5px;
+    border-radius: var(--border-radius); /* <- USA VARIÁVEL */
   }
   .main-nav a:hover {
-    background: #e9e9e9;
+    background: var(--color-bg-hover); /* <- USA VARIÁVEL */
   }
 
-  .social-nav {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
   .social-nav a {
     text-decoration: none;
-    color: #777;
-    font-weight: 500;
+    color: #555; /* Podemos manter ou criar uma var --color-icon */
   }
   .social-nav a:hover {
-    color: #007bff;
+    color: var(--color-primary); /* <- USA VARIÁVEL */
+  }
+  
+  .social-nav :global(svg) {
+    width: 28px;
+    height: 28px;
+  }
+
+/* 2. ESTE É O NOVO BLOCO DE ESTILO */
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    flex-grow: 1; /* O card se estica na altura */
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%; /* O card ocupa toda a sidebar */
+    flex-grow: 1;  /* O card se estica para preencher o espaço vertical */
+
+    /* A altura do card precisa ser 100% da sidebar
+       para que o 'auto' tenha para onde "empurrar" */
+    height: 100%;
+    width: 100%; 
+  }
+
+  .card-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Garante que os links da main-nav ocupem a largura */
+  }
+
+  .card-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    margin-top: auto; /* EMPURRA O GRUPO INTEIRO PARA BAIXO */
+    margin-bottom: 3rem;
   }
 
   /* --- Layout Mobile --- */
   @media (max-width: 768px) {
     .sidebar {
-      /* No mobile, o sidebar vira um header fixo no topo */
       position: static;
       width: 100%;
       height: auto;
       border-right: none;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--color-border); /* <- USA VARIÁVEL */
     }
-    
-    /* (Depois podemos re-adicionar o 'hamburger'
-       aqui para esconder os menus no mobile) */
   }
 </style>

@@ -2,7 +2,7 @@
 title: 'Meu Primeiro Post no Blog'
 description: 'Este é o primeiro post do meu novo blog feito com Astro.'
 pubDate: '2025-10-24'
-heroImage: '../../assets/fahim-mohammed-SWAHvtC8S2E-unsplash.jpg'
+heroImage: '../../assets/26102025.jpg'
 ---
 
 # Meu Primeiro Post
