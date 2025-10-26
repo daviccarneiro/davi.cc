@@ -1,0 +1,189 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contato | davi.cc">
+  <section class="contact">
+    <h1>Fale comigo</h1>
+    <p class="subtitle">Tem uma ideia, projeto ou dúvida? Envie uma mensagem.</p>
+
+    <form class="contact-form" id="contact-form" novalidate>
+      <div class="field">
+        <label for="name">Nome</label>
+        <input type="text" id="name" name="name" required placeholder="Seu nome" />
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="voce@exemplo.com" />
+      </div>
+
+      <div class="field">
+        <label for="subject">Assunto</label>
+        <input type="text" id="subject" name="subject" placeholder="Sobre o que é?" />
+      </div>
+
+      <div class="field">
+        <label for="message">Mensagem</label>
+        <textarea id="message" name="message" required rows="6" placeholder="Escreva sua mensagem..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submit-btn">Enviar</button>
+      <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <style>
+    .contact {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .subtitle {
+      color: var(--color-text);
+      opacity: 0.9;
+    }
+
+    .contact-form {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input, textarea {
+      font: inherit;
+      color: var(--color-text);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      padding: 0.625rem 0.75rem;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 20%, transparent);
+    }
+
+    .btn-primary {
+      align-self: flex-start;
+      background: var(--color-primary);
+      color: #fff;
+      border: 0;
+      border-radius: var(--border-radius);
+      padding: 0.625rem 1rem;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(0.95);
+    }
+
+    .form-status {
+      margin-top: 0.25rem;
+      min-height: 1.25rem;
+      font-size: 0.95rem;
+    }
+    .form-status.success {
+      color: #1c7c2c;
+    }
+    .form-status.error {
+      color: #b42318;
+    }
+  </style>
+
+  <script>
+    function initContactForm() {
+      const formNode = document.getElementById('contact-form');
+      const statusNode = document.getElementById('form-status');
+      const submitBtnNode = document.getElementById('submit-btn');
+
+      if (
+        formNode instanceof HTMLFormElement &&
+        statusNode instanceof HTMLParagraphElement &&
+        submitBtnNode instanceof HTMLButtonElement
+      ) {
+        if (formNode.dataset.bound === 'true') return;
+        formNode.dataset.bound = 'true';
+
+        const setStatus = (message: string, type: '' | 'success' | 'error' = '') => {
+          statusNode.textContent = message || '';
+          statusNode.classList.remove('success', 'error');
+          if (type) statusNode.classList.add(type);
+        };
+
+        const getFieldValue = (id: string): string => {
+          const el = document.getElementById(id);
+          if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+            return el.value.trim();
+          }
+          return '';
+        };
+
+        formNode.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          setStatus('Enviando...');
+          submitBtnNode.disabled = true;
+
+          try {
+            const payload = {
+              name: getFieldValue('name'),
+              email: getFieldValue('email'),
+              subject: getFieldValue('subject'),
+              message: getFieldValue('message')
+            };
+
+            const response = await fetch('/api/contato', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+              setStatus('Obrigado! Sua mensagem foi enviada com sucesso.', 'success');
+              formNode.reset();
+            } else {
+              let errorMsg = 'Não foi possível enviar. Tente novamente mais tarde.';
+              try {
+                const data = await response.json();
+                if (data && (data.error || data.message)) {
+                  errorMsg = data.error || data.message;
+                }
+              } catch {}
+              setStatus(errorMsg, 'error');
+            }
+          } catch {
+            setStatus('Erro de rede. Verifique sua conexão e tente novamente.', 'error');
+          } finally {
+            submitBtnNode.disabled = false;
+          }
+        });
+      }
+    }
+
+    initContactForm();
+    document.addEventListener('astro:page-load', initContactForm);
+    document.addEventListener('astro:after-swap', initContactForm);
+  </script>
+</Layout>
+
+

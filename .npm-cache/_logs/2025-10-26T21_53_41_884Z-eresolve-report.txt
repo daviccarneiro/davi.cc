@@ -1,0 +1,18 @@
+'Log files:
+/Users/davicarneiro/Desktop/davi.cc/.npm-cache/_logs/2025-10-26T21_53_41_884Z-debug-0.log
+
+# npm resolution error report
+
+While resolving: @0.0.1
+Found: astro@5.15.1
+node_modules/astro
+  astro@"^5.15.1" from the root project
+
+Could not resolve dependency:
+peer astro@"^4.2.0" from @astrojs/vercel@7.8.2
+node_modules/@astrojs/vercel
+  dev @astrojs/vercel@"^7.6.0" from the root project
+
+Fix the upstream dependency conflict, or retry
+this command with --force or --legacy-peer-deps
+to accept an incorrect (and potentially broken) dependency resolution.

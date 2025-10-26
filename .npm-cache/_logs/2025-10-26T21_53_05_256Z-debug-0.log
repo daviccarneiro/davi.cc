@@ -1,0 +1,68 @@
+0 verbose cli /Users/davicarneiro/.nvm/versions/node/v22.18.0/bin/node /Users/davicarneiro/.nvm/versions/node/v22.18.0/bin/npm
+1 info using npm@10.9.3
+2 info using node@v22.18.0
+3 silly config load:file:/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/davicarneiro/Desktop/davi.cc/.npmrc
+5 silly config load:file:/Users/davicarneiro/.npmrc
+6 silly config load:file:/Users/davicarneiro/.nvm/versions/node/v22.18.0/etc/npmrc
+7 verbose title npm i resend @astrojs/vercel@^7.6.0
+8 verbose argv "i" "resend" "@astrojs/vercel@^7.6.0" "--save-dev"
+9 verbose logfile logs-max:10 dir:/Users/davicarneiro/Desktop/davi.cc/.npm-cache/_logs/2025-10-26T21_53_05_256Z-
+10 verbose logfile /Users/davicarneiro/Desktop/davi.cc/.npm-cache/_logs/2025-10-26T21_53_05_256Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 warn idealTree Removing dependencies.resend in favor of devDependencies.resend
+14 silly idealTree buildDeps
+15 silly fetch manifest @astrojs/vercel@^7.6.0
+16 silly packumentCache full:https://registry.npmjs.org/@astrojs%2fvercel cache-miss
+17 http cache https://registry.npmjs.org/@astrojs%2fvercel 24ms (cache hit)
+18 silly packumentCache full:https://registry.npmjs.org/@astrojs%2fvercel set size:803651 disposed:false
+19 silly fetch manifest astro@^5.15.1
+20 silly packumentCache full:https://registry.npmjs.org/astro cache-miss
+21 http fetch GET 200 https://registry.npmjs.org/astro 384ms (cache miss)
+22 silly packumentCache full:https://registry.npmjs.org/astro set size:undefined disposed:false
+23 silly fetch manifest astro@^4.2.0
+24 silly packumentCache full:https://registry.npmjs.org/astro cache-miss
+25 http cache https://registry.npmjs.org/astro 8ms (cache hit)
+26 silly packumentCache full:https://registry.npmjs.org/astro set size:8387488 disposed:false
+27 verbose stack Error: unable to resolve dependency tree
+27 verbose stack     at #failPeerConflict (/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:1363:25)
+27 verbose stack     at #loadPeerSet (/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:1329:33)
+27 verbose stack     at async #buildDepStep (/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:904:11)
+27 verbose stack     at async Arborist.buildIdealTree (/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:181:7)
+27 verbose stack     at async Promise.all (index 1)
+27 verbose stack     at async Arborist.reify (/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:131:5)
+27 verbose stack     at async Install.exec (/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/lib/commands/install.js:150:5)
+27 verbose stack     at async Npm.exec (/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/lib/npm.js:207:9)
+27 verbose stack     at async module.exports (/Users/davicarneiro/.nvm/versions/node/v22.18.0/lib/node_modules/npm/lib/cli/entry.js:74:5)
+28 error code ERESOLVE
+29 error ERESOLVE unable to resolve dependency tree
+30 error
+31 error While resolving: @0.0.1
+31 error Found: astro@5.15.1
+31 error node_modules/astro
+31 error   astro@"^5.15.1" from the root project
+31 error
+31 error Could not resolve dependency:
+31 error peer astro@"^4.2.0" from @astrojs/vercel@7.8.2
+31 error node_modules/@astrojs/vercel
+31 error   dev @astrojs/vercel@"^7.6.0" from the root project
+31 error
+31 error Fix the upstream dependency conflict, or retry
+31 error this command with --force or --legacy-peer-deps
+31 error to accept an incorrect (and potentially broken) dependency resolution.
+32 error
+32 error
+32 error For a full report see:
+32 error /Users/davicarneiro/Desktop/davi.cc/.npm-cache/_logs/2025-10-26T21_53_05_256Z-eresolve-report.txt
+33 silly unfinished npm timer reify 1761515585458
+34 silly unfinished npm timer reify:loadTrees 1761515585458
+35 silly unfinished npm timer idealTree:buildDeps 1761515585501
+36 silly unfinished npm timer idealTree:#root 1761515585501
+37 verbose cwd /Users/davicarneiro/Desktop/davi.cc
+38 verbose os Darwin 25.0.0
+39 verbose node v22.18.0
+40 verbose npm  v10.9.3
+41 verbose exit 1
+42 verbose code 1
+43 error A complete log of this run can be found in: /Users/davicarneiro/Desktop/davi.cc/.npm-cache/_logs/2025-10-26T21_53_05_256Z-debug-0.log
