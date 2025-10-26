@@ -29,7 +29,7 @@ export const POST: APIRoute = async ({ request }) => {
       </div>
     `;
 
-    const fromAddress = import.meta.env.RESEND_FROM || 'Contato davi.cc <onboarding@resend.dev>';
+    const fromAddress = import.meta.env.RESEND_FROM || '[NOVA MENSAGEM] - davi.cc <onboarding@resend.dev>';
     const toAddress = import.meta.env.RESEND_TO || 'davicarneirodcc@gmail.com';
 
     const { error } = await resend.emails.send({
