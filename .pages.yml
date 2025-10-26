@@ -1,25 +1,29 @@
-# 1. Configuração de Mídia
-# Define para onde o CMS deve enviar novas imagens.
-# Para que a otimização de imagens do Astro (<Image />) funcione,
-# elas DEVEM ser salvas dentro de 'src/assets'.
-media: src/assets
-
 collections:
   # --- Coleção de Blog ---
   - name: Blog
-    # 'name' é o nome que aparecerá na interface do CMS
+    # 'name' é o rótulo que aparece na interface do CMS
     
     path: src/content/blog
-    # O caminho exato para seus arquivos .md
+    # O caminho para os arquivos .md da sua coleção
     
     can_create: true
-    # Permite criar novos posts
+    # Permite a criação de novos posts
     
-    # 2. A MÁGICA DO VÍDEO
-    # 'schema: astro' diz ao PagesCMS para ler seu
-    # arquivo 'src/content/config.ts' automaticamente.
-    #
-    # Ele importará todos os campos (title, description, pubDate, heroImage)
-    # e seus tipos corretos (z.string(), z.coerce.date(), image())
-    # sem que você precise redefini-los aqui.
+    # 1. A integração nativa com Astro (como mostrado no vídeo)
+    # Isto lê seu 'src/content/config.ts' diretamente.
     schema: astro
+    
+    # 2. A configuração de mídia correta (como na documentação)
+    # Isto diz ao CMS como lidar com os uploads de arquivos
+    # especificamente para ESTA coleção.
+    media:
+      # 'path': Para onde as novas imagens devem ser enviadas.
+      # Para o 'z.image()' e o <Image /> do Astro,
+      # DEVEMOS usar 'src/assets'.
+      path: src/assets
+      
+      # 'return_path': O formato do caminho a ser salvo no .md
+      # 'relative_from_doc' é o que precisamos.
+      # Ele salvará o caminho como '../../assets/minha-imagem.jpg',
+      # que é exatamente o que o 'z.image()' espera.
+      return_path: relative_from_doc
