@@ -46,8 +46,9 @@ collections:
         
       - name: heroImage
         label: Imagem de Capa
-        type: file
+        type: image # Mudar para 'image'
         required: false
+        image_path: public/uploads/blog # Diz ao CMS para salvar uploads aqui
         
         # Esta é a configuração mais importante e complexa:
         # 1. 'file_path': Diz ao CMS para ABRIR esta pasta no seletor de arquivos.
