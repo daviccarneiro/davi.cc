@@ -9,11 +9,6 @@ media:
   # 'path': Onde as novas imagens serão salvas.
   # Para o z.image() do Astro, DEVE ser 'src/assets'.
   path: src/assets
-  
-  # 'return_path': Como o caminho será salvo no arquivo .md
-  # 'relative_from_doc' é o que o z.image() do Astro espera.
-  # (Salvará como: ../../assets/minha-imagem.jpg)
-  return_path: relative_from_doc
 
 # 3. Lista de Coleções de Conteúdo
 # Este é o array que contém todas as suas seções de conteúdo.
