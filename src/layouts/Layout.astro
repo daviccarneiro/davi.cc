@@ -1,5 +1,4 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
 import Sidebar from '../components/Sidebar.astro';
 import Header from '../components/Header.astro';
 
@@ -23,7 +22,6 @@ const { title = "Portfólio" } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
 		<title>{title}</title>
-    <ViewTransitions />
 
     <script is:inline>
       // Esta função é auto-executada
@@ -44,26 +42,13 @@ const { title = "Portfólio" } = Astro.props;
 	</head>
   <body>
     <Header />
-    <Sidebar transition:persist />
+    <Sidebar />
     <main>
       <slot />
     </main>
 
     <script>
       // --- Definição das Funções ---
-
-      // Função 1: APLICA o tema (agora em um 'documento' específico)
-      const applyTheme = (doc: Document) => {
-        const theme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        const root = doc.documentElement; // <html>
-        if (theme === 'dark' || (!theme && prefersDark)) {
-          root.classList.add('dark');
-        } else {
-          root.classList.remove('dark');
-        }
-      };
 
       // (Função 2: handleThemeToggle, permanece a mesma)
       const handleThemeToggle = () => {
@@ -87,21 +72,10 @@ const { title = "Portfólio" } = Astro.props;
 
       // 1. Roda na CARGA INICIAL
       initThemeToggle();
-      
-      // 2. Roda ANTES da troca de DOM (A NOVA SOLUÇÃO)
-      //    'e.newDocument' é o <html> da página que está chegando.
-      document.addEventListener('astro:before-swap', (e) => {
-        applyTheme(e.newDocument);
-      });
 
-      // 3. Roda DEPOIS que tudo terminou
+      // 2. Roda DEPOIS que tudo terminou
       document.addEventListener('astro:page-load', () => {
         // Re-anexa o listener ao botão persistido
-        initThemeToggle();
-      });
-
-      // 4. Garante re-inicialização após a troca de DOM nas transições
-      document.addEventListener('astro:after-swap', () => {
         initThemeToggle();
       });
     </script>

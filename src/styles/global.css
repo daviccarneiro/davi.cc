@@ -44,9 +44,16 @@
     /* 1. MUDANÇA: Tornamos o body um grid */
     display: grid;
     grid-template-columns: var(--sidebar-width) 1fr;
-    html:not([data-astro-transition]) body {
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
+  }
+
+  /* Aplica transição suave de cor normalmente */
+  html:not([data-astro-transition]) body {
+    transition: none;
+  }
+
+  /* Durante trocas (quando houver), não anima cor para ficar instantâneo */
+  html[data-astro-transition] body {
+    transition: none;
   }
   
   h1, h2, h3, h4, h5, h6 {
