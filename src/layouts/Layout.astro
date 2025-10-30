@@ -42,10 +42,14 @@ const { title = "Portfólio" } = Astro.props;
 	</head>
   <body>
     <Header />
-    <Sidebar />
-    <main>
-      <slot />
-    </main>
+    <div class="app-shell">
+      <div class="card-slot" aria-hidden="true"></div>
+      <Sidebar />
+      <main class="content">
+        <slot />
+        <footer class="site-footer">feito com ❤️ por Davi</footer>
+      </main>
+    </div>
 
     <script>
       // --- Definição das Funções ---
@@ -80,5 +84,5 @@ const { title = "Portfólio" } = Astro.props;
       });
     </script>
 
-	</body>
+        </body>
 </html>
