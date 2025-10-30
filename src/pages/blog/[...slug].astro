@@ -20,34 +20,98 @@ const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title}>
-  <main>
-    <article>
-      
-      {post.data.heroImage && (
-        <Image 
-          src={post.data.heroImage} 
-          width={720} 
-          height={360}
-          format="webp"
-          alt="Imagem de capa do post"
-          class="hero-image"
-        />
-      )}
-      
+  <article class="post-article">
+    {post.data.heroImage && (
+      <Image
+        src={post.data.heroImage}
+        width={960}
+        height={480}
+        format="webp"
+        alt={post.data.title}
+        class="hero-image"
+      />
+    )}
+
+    <header class="post-header">
       <h1>{post.data.title}</h1>
-      <p><em>Publicado em: {post.data.pubDate.toLocaleDateString('pt-BR')}</em></p>
-      
+      <p class="post-meta">Publicado em {post.data.pubDate.toLocaleDateString('pt-BR')}</p>
+    </header>
+
+    <div class="post-body">
       <Content />
-    </article>
-  </main>
+    </div>
+  </article>
 </Layout>
 
 <style>
+  .post-article {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 1.5vw + 1rem, 2rem);
+  }
 
   .hero-image {
-    width: 80%;
+    width: 100%;
     height: auto;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 20px 45px rgba(44, 60, 118, 0.22);
+  }
+
+  .post-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .post-meta {
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--color-text) 55%, transparent);
+  }
+
+  .post-body {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .post-body :global(p) {
+    line-height: 1.85;
+    font-size: 1.05rem;
+  }
+
+  .post-body :global(h2),
+  .post-body :global(h3) {
+    margin-top: 1.75rem;
+  }
+
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .post-body :global(blockquote) {
+    margin: 0;
+    padding: 1rem 1.5rem;
+    border-left: 3px solid color-mix(in oklab, var(--color-primary) 55%, transparent);
+    background: color-mix(in oklab, var(--color-surface) 80%, transparent);
+    border-radius: var(--border-radius-sm);
+    font-style: italic;
+  }
+
+  .post-body :global(pre) {
+    border-radius: var(--border-radius-sm);
+    padding: 1rem;
+    overflow-x: auto;
+    background: color-mix(in oklab, var(--color-surface) 75%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-border) 55%, transparent);
+  }
+
+  @media (max-width: 720px) {
+    .post-body :global(p) {
+      font-size: 1rem;
+    }
   }
 </style>

@@ -37,23 +37,26 @@ import Layout from '../layouts/Layout.astro';
     .contact {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
     .subtitle {
-      color: var(--color-text);
-      opacity: 0.9;
+      color: var(--color-text-soft);
+      font-size: 1.05rem;
+      max-width: 38ch;
     }
 
     .contact-form {
       margin-top: 0.5rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      border: 1px solid var(--color-border);
-      background: var(--color-bg);
-      border-radius: var(--border-radius);
-      padding: 1rem;
+      gap: 1.25rem;
+      border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
+      background: color-mix(in oklab, var(--color-surface) 90%, transparent);
+      border-radius: var(--border-radius-md);
+      padding: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
+      box-shadow: 0 18px 45px rgba(38, 56, 120, 0.12);
+      backdrop-filter: blur(10px);
     }
 
     .field {
@@ -69,36 +72,43 @@ import Layout from '../layouts/Layout.astro';
     input, textarea {
       font: inherit;
       color: var(--color-text);
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--border-radius);
-      padding: 0.625rem 0.75rem;
+      background: color-mix(in oklab, var(--color-surface) 80%, transparent);
+      border: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
+      border-radius: var(--border-radius-sm);
+      padding: 0.75rem 0.9rem;
       outline: none;
+      transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
     }
 
     input:focus, textarea:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 20%, transparent);
+      border-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+      background: color-mix(in oklab, var(--color-surface) 95%, transparent);
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-primary) 22%, transparent);
     }
 
     .btn-primary {
       align-self: flex-start;
-      background: var(--color-primary);
+      background: linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 90%, white), var(--color-primary));
       color: #fff;
       border: 0;
-      border-radius: var(--border-radius);
-      padding: 0.625rem 1rem;
+      border-radius: 999px;
+      padding: 0.65rem 1.5rem;
       cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 16px 35px rgba(61, 123, 255, 0.28);
+      transition: transform 200ms ease, box-shadow 200ms ease;
     }
 
     .btn-primary:hover {
-      filter: brightness(0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 22px 45px rgba(61, 123, 255, 0.32);
     }
 
     .form-status {
       margin-top: 0.25rem;
       min-height: 1.25rem;
       font-size: 0.95rem;
+      color: var(--color-text-soft);
     }
     .form-status.success {
       color: #1c7c2c;
