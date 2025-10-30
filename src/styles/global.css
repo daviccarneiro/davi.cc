@@ -5,12 +5,12 @@
   color-scheme: light;
 
   /* Paleta base */
-  --color-text: #20212b;
+  --color-text: #1f2736;
   --color-text-soft: color-mix(in oklab, var(--color-text) 82%, transparent);
-  --color-bg: #f9fbff;
-  --color-primary: #3d7bff;
-  --color-border: #d9e2ff;
-  --color-surface: rgba(255, 255, 255, 0.92);
+  --color-bg: #f3f5f9;
+  --color-primary: #2563eb;
+  --color-border: #d7dbe5;
+  --color-surface: #ffffff;
 
   /* Tipografia e layout */
   --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -21,8 +21,8 @@
   --shell-padding: clamp(2rem, 3vw + 1.25rem, 4rem);
 
   /* Efeitos */
-  --shadow-card: 0 28px 80px rgba(58, 86, 160, 0.26);
-  --shadow-surface: 0 24px 70px rgba(35, 52, 115, 0.18);
+  --shadow-card: 0 20px 60px rgba(15, 23, 42, 0.08);
+  --shadow-surface: 0 18px 46px rgba(15, 23, 42, 0.08);
   --border-radius-lg: 28px;
   --border-radius-md: 18px;
   --border-radius-sm: 12px;
@@ -33,12 +33,12 @@
 html.dark {
   color-scheme: dark;
 
-  --color-text: #f1f3ff;
-  --color-text-soft: color-mix(in oklab, var(--color-text) 70%, transparent);
-  --color-bg: #05070e;
-  --color-primary: #7ca7ff;
-  --color-border: rgba(112, 136, 201, 0.32);
-  --color-surface: rgba(12, 17, 30, 0.82);
+  --color-text: #f5f7ff;
+  --color-text-soft: color-mix(in oklab, var(--color-text) 68%, transparent);
+  --color-bg: #070b16;
+  --color-primary: #5b8cff;
+  --color-border: rgba(92, 122, 189, 0.35);
+  --color-surface: rgba(12, 17, 28, 0.92);
 
   --shadow-card: 0 30px 80px rgba(8, 12, 30, 0.55);
   --shadow-surface: 0 30px 90px rgba(3, 7, 20, 0.65);
@@ -51,11 +51,11 @@ html.dark {
 body {
   font-family: var(--font-family-sans);
   color: var(--color-text);
-  background: radial-gradient(circle at top left, rgba(101, 147, 255, 0.18), transparent 45%),
-              radial-gradient(circle at bottom right, rgba(146, 99, 255, 0.18), transparent 55%),
-              var(--color-bg);
+  background: linear-gradient(180deg, #fcfdff 0%, #f2f4f8 65%, #eceff4 100%);
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -91,6 +91,7 @@ a:hover {
   align-items: flex-start;
   gap: clamp(2.5rem, 4vw, 4.5rem);
   max-width: min(var(--shell-max-width), 100%);
+  flex: 1;
   margin: 0 auto;
   padding: var(--shell-padding);
 }
@@ -144,9 +145,11 @@ main.content ol {
 }
 
 .site-footer {
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px dashed color-mix(in oklab, var(--color-border) 60%, transparent);
+  width: 100%;
+  max-width: min(var(--shell-max-width), 100%);
+  margin: 0 auto;
+  padding: clamp(1.75rem, 2.5vw, 2.5rem) clamp(1.5rem, 3vw, 3rem) clamp(2.5rem, 4vw, 3rem);
+  border-top: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
   text-align: center;
   font-size: 0.95rem;
   color: var(--color-text-soft);
