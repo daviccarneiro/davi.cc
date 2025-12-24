@@ -27,7 +27,8 @@ import myProfilePic from "../assets/davi.jpg";
           <>
             <a href="/" class={currentPath === '/' ? 'is-active' : ''} data-i18n-key="nav.home">Início</a>
             <a href="/blog" class={isBlog ? 'is-active' : ''} data-i18n-key="nav.blog">Blog</a>
-            <a href="/contato" class={currentPath === '/contato' ? 'is-active' : ''} data-i18n-key="nav.contact">Contato</a>
+            <a href="/resources" class={currentPath.startsWith('/resources') ? 'is-active' : ''} data-i18n-key="nav.resources">Recursos</a>
+            <a href="/contact" class={currentPath === '/contact' ? 'is-active' : ''} data-i18n-key="nav.contact">Contato</a>
           </>
         );
       })()}
@@ -53,8 +54,8 @@ import myProfilePic from "../assets/davi.jpg";
 <style>
   .profile-card {
     position: sticky;
-    top: 0;
-    width: min(var(--card-width), calc(100vw - 2 * var(--shell-padding)));
+    top: var(--shell-padding);
+    width: 100%;
     max-width: 360px;
     z-index: 10;
     pointer-events: auto;
@@ -106,14 +107,13 @@ import myProfilePic from "../assets/davi.jpg";
   }
 
   .main-nav {
-    display: flex;
+    display: grid;
     width: 100%;
-    justify-content: center;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
     gap: 0.75rem;
   }
 
   .main-nav a {
-    flex: 1;
     text-align: center;
     text-decoration: none;
     font-weight: 600;
@@ -123,6 +123,7 @@ import myProfilePic from "../assets/davi.jpg";
     border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
     color: var(--color-text);
     transition: background-color 180ms ease, border-color 180ms ease;
+    white-space: nowrap;
   }
 
   .main-nav a.is-active {
@@ -208,8 +209,7 @@ import myProfilePic from "../assets/davi.jpg";
 
   @media (max-width: 768px) {
     .profile-card {
-      margin-top: 1rem;
-      padding: 0 clamp(1rem, 4vw, 1.5rem);
+      display: none;
     }
 
     .card-surface {

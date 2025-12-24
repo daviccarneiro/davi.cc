@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Contato | davi.cc">
+<Layout title="davi.cc | Contact">
   <section class="contact">
     
     <p class="subtitle" data-i18n-key="contact.subtitle">Tem uma ideia, projeto ou dúvida? Envie uma mensagem.</p>
@@ -165,7 +165,7 @@ import Layout from '../layouts/Layout.astro';
               message: getFieldValue('message')
             };
 
-            const response = await fetch('/api/contato', {
+            const response = await fetch('/api/contact', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',

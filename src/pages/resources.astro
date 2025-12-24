@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+type Resource = {
+  url: string;
+  overrideTitle?: string;
+  overrideDescription?: string;
+  overrideImage?: string;
+  tags?: string[];
+  date?: string | Date;
+};
+
+const resources = (await getCollection('resources')) as Array<{ id: string; data: Resource }>;
+
+const fetchOgData = async (url: string) => {
+  try {
+    const resp = await fetch(url, { redirect: 'follow' });
+    const html = await resp.text();
+    const pick = (prop: string) => {
+      const re = new RegExp(`<meta[^>]+property=["']${prop}["'][^>]+content=["']([^"']+)["'][^>]*>`, 'i');
+      const m = html.match(re);
+      return m ? m[1] : '';
+    };
+    const ogTitle = pick('og:title') || '';
+    const ogDesc = pick('og:description') || '';
+    const ogImage = pick('og:image') || '';
+    return { ogTitle, ogDesc, ogImage };
+  } catch {
+    return { ogTitle: '', ogDesc: '', ogImage: '' };
+  }
+};
+
+const truncate = (text: string, max: number) => {
+  if (!text) return '';
+  const str = String(text).trim();
+  if (str.length <= max) return str;
+  return str.slice(0, max - 1).trimEnd() + '...';
+};
+
+const cards = await Promise.all(
+  resources.map(async (entry) => {
+    const { url, overrideTitle, overrideDescription, overrideImage } = entry.data;
+    const og = await fetchOgData(url);
+    return {
+      url,
+      title: truncate(overrideTitle || og.ogTitle || url, 64),
+      description: truncate(overrideDescription || og.ogDesc || '', 160),
+      image: overrideImage || og.ogImage || '',
+      host: (() => {
+        try { return new URL(url).host; } catch { return ''; }
+      })()
+    };
+  })
+);
+---
+
+<Layout title="davi.cc | Resources">
+  <section class="resources">
+    <ul class="grid">
+      {cards.map((card) => (
+        <li class="card">
+          <a class="card-link" href={card.url} target="_blank" rel="noopener noreferrer">
+            <div class="thumb" style={`background-image: url('${card.image}');`}></div>
+            <div class="meta">
+              <h3>{card.title}</h3>
+              {card.description && <p>{card.description}</p>}
+              {card.host && <span class="host">{card.host}</span>}
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <style>
+    .resources {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .grid {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+    }
+
+    .card {
+      border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+      border-radius: var(--border-radius-md);
+      background: color-mix(in oklab, var(--color-surface) 96%, transparent);
+      transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+    .card:hover {
+      background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+      border-color: color-mix(in oklab, var(--color-border) 85%, transparent);
+      transform: translateY(-1px);
+    }
+
+    .card-link {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0.85rem;
+      padding: 0.9rem;
+      color: inherit;
+      align-items: center;
+      min-height: 112px;
+    }
+
+    .thumb {
+      width: 120px;
+      height: 80px;
+      border-radius: var(--border-radius-sm);
+      background-size: cover;
+      background-position: center;
+      background-color: color-mix(in oklab, var(--color-bg) 92%, transparent);
+      border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+    }
+
+    .meta {
+      display: grid;
+      gap: 0.35rem;
+    }
+    .meta h3 {
+      margin: 0;
+      font-size: clamp(1rem, 0.6vw + 0.95rem, 1.15rem);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .meta p {
+      margin: 0;
+      color: var(--color-text-soft);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .meta .host {
+      font-size: 0.85rem;
+      color: color-mix(in oklab, var(--color-text) 55%, transparent);
+    }
+
+    @media (max-width: 720px) {
+      .card-link {
+        grid-template-columns: 100px 1fr;
+        min-height: 96px;
+      }
+      .thumb {
+        width: 100px;
+        height: 66px;
+      }
+    }
+  </style>
+</Layout>
+

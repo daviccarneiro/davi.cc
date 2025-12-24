@@ -16,7 +16,7 @@
   --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-family-mono: 'JetBrains Mono', monospace;
   --content-width: 880px;
-  --card-width: 280px;
+  --card-width: 340px;
   --shell-max-width: 1320px;
   --shell-padding: clamp(2rem, 3vw + 1.25rem, 4rem);
 
@@ -72,10 +72,13 @@ a:hover {
 }
 
 .app-shell {
-  display: flex;
-  align-items: flex-start;
-  gap: clamp(0.75rem, 1.5vw, 1.25rem);
-  max-width: min(var(--shell-max-width), 100%);
+  display: grid;
+  grid-template-columns: min(var(--card-width), 100%) minmax(0, var(--content-width));
+  column-gap: 0.75rem;
+  align-items: start;
+  justify-content: center;
+  max-width: min(var(--shell-max-width), calc(var(--card-width) + 0.75rem + var(--content-width)));
+  width: 100%;
   flex: 1;
   margin: 0 auto;
   padding: var(--shell-padding);
@@ -88,7 +91,7 @@ a:hover {
 main.content {
   position: relative;
   flex: 0 0 auto;
-  width: min(var(--content-width), 100%);
+  width: var(--content-width);
   margin-left: 0;
   padding: clamp(2rem, 3vw + 1rem, 3rem);
   border-radius: var(--border-radius-lg);
@@ -196,6 +199,7 @@ main.content:hover {
 
 @media (max-width: 1060px) {
   .app-shell {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 1.75rem;
@@ -208,6 +212,7 @@ main.content:hover {
   main.content {
     margin-left: 0;
     margin-right: 0;
+    width: 100%;
     max-width: 100%;
   }
 }

@@ -51,6 +51,8 @@ const { title = "Portfólio" } = Astro.props;
           'nav.home': 'Início',
           'nav.blog': 'Blog',
           'nav.contact': 'Contato',
+          'nav.resources': 'Recursos',
+          'title.cv': 'Currículo',
           'meta.base': 'Base',
           'meta.baseCity': 'João Pessoa, Brasil',
           'home.recent': 'Postagens recentes',
@@ -59,6 +61,15 @@ const { title = "Portfólio" } = Astro.props;
           'title.home': 'Início',
           'title.blog': 'Blog',
           'title.contact': 'Contato',
+          'title.resources': 'Recursos',
+          'cv.education': 'Educação',
+          'cv.work': 'Experiência',
+          'cv.projects': 'Projetos',
+          'cv.skills': 'Habilidades',
+          'cv.download': 'Baixar em PDF',
+          'cv.share': 'Compartilhar este CV',
+          'cv.copied': 'CV copiado!',
+          'cv.gpa': 'GPA',
           'blog.header.kicker': 'Blog',
           'blog.header.title': 'Artigos e Postagens',
           'blog.header.lead': 'Nada daqui tem DOI nem qualis, mas é digitado com o coração e (quase) sem IA.',
@@ -83,7 +94,9 @@ const { title = "Portfólio" } = Astro.props;
           'nav.home': 'Home',
           'nav.blog': 'Blog',
           'nav.contact': 'Contact',
-          'meta.base': 'Base',
+          'nav.resources': 'Resources',
+          'title.cv': 'CV',
+          'meta.base': 'Location',
           'meta.baseCity': 'João Pessoa, Brazil',
           'home.recent': 'Recent posts',
           'home.viewAll': 'View all',
@@ -91,6 +104,15 @@ const { title = "Portfólio" } = Astro.props;
           'title.home': 'Home',
           'title.blog': 'Blog',
           'title.contact': 'Contact',
+          'title.resources': 'Resources',
+          'cv.education': 'Education',
+          'cv.work': 'Work Experience',
+          'cv.projects': 'Major Projects',
+          'cv.skills': 'Skills',
+          'cv.download': 'Download as PDF',
+          'cv.share': 'Share this CV',
+          'cv.copied': 'CV copied!',
+          'cv.gpa': 'GPA',
           'blog.header.kicker': 'Blog',
           'blog.header.title': 'Articles and Posts',
           'blog.header.lead': 'None of this has a DOI or qualis, but it is typed with heart and (almost) no AI.',
@@ -136,11 +158,15 @@ const { title = "Portfólio" } = Astro.props;
           pageName = dict['title.home'] || 'Home';
         } else if (path === '/blog' || path === '/blog/') {
           pageName = dict['title.blog'] || 'Blog';
+        } else if (path === '/resources' || path === '/resources/') {
+          pageName = dict['title.resources'] || 'Resources';
+        } else if (path.startsWith('/cv')) {
+          pageName = dict['title.cv'] || 'CV';
         } else if (path.startsWith('/blog/')) {
           const postTitleNode = document.querySelector('article.post-article h1');
           const postTitle = postTitleNode && postTitleNode.textContent ? postTitleNode.textContent.trim() : '';
           pageName = postTitle || (dict['title.blog'] || 'Blog');
-        } else if (path.startsWith('/contato')) {
+        } else if (path.startsWith('/contact')) {
           pageName = dict['title.contact'] || 'Contact';
         } else {
           pageName = document.title.replace(/^.*\|\s*/, '') || 'Page';
@@ -169,6 +195,8 @@ const { title = "Portfólio" } = Astro.props;
           t: (key) => (translations[currentLang] && translations[currentLang][key]) || key,
           getLang: () => currentLang
         };
+        // Notify pages that the language changed
+        try { window.dispatchEvent(new CustomEvent('app:language-changed', { detail: lang })); } catch {}
       };
 
       const initLang = async () => {
