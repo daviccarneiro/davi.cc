@@ -1,0 +1,154 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+// Buscar os 3 posts mais recentes
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<Layout title="davi.cc | Portfólio e Blog">
+  <section class="intro">
+    <p>
+      Não sou ninguém que dispense apresentações, tampouco Forbes Under30 ou qualquer outra grande nomeação. Mas sou e tento ser bom no que faço.
+    </p>
+  </section>
+
+  <section class="recent">
+    <div class="section-heading">
+      <h2 data-i18n-key="home.recent">Postagens recentes</h2>
+      <a class="more" href="/blog" data-i18n-key="home.viewAll">Ver tudo</a>
+    </div>
+    <ul class="recent-posts">
+      {posts.map((post) => (
+        <li class="post-item">
+          <a href={`/blog/${post.slug}/`} class="post-link">
+            {post.data.heroImage && (
+              <Image src={post.data.heroImage} width={200} height={128} format="webp" alt={post.data.title} class="thumb" />
+            )}
+            <div class="meta">
+              <h3>{post.data.title}</h3>
+              <p>{post.data.description}</p>
+              <span class="date">{post.data.pubDate.toLocaleDateString('pt-BR')}</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .recent {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .section-heading .more {
+    margin-left: auto;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  .section-heading .more:hover {
+    opacity: 0.8;
+  }
+
+  .recent-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .post-item {
+    position: relative;
+    background: color-mix(in oklab, var(--color-surface) 96%, transparent);
+    border-radius: var(--border-radius-md);
+    border: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
+    box-shadow: none;
+    overflow: hidden;
+    transition: background-color 200ms ease, border-color 200ms ease;
+  }
+
+  .post-link {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.35fr) 1fr;
+    gap: 1.25rem;
+    padding: clamp(1rem, 1.5vw + 0.75rem, 1.5rem);
+    color: inherit;
+    align-items: center;
+  }
+
+  .post-item:hover {
+    background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+    border-color: color-mix(in oklab, var(--color-border) 75%, transparent);
+  }
+
+  .thumb {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-sm);
+    display: block;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .meta h3 {
+    margin: 0;
+    font-size: clamp(1.1rem, 0.7vw + 1rem, 1.35rem);
+  }
+
+  .meta p {
+    margin: 0;
+  }
+
+  .meta .date {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--color-text) 55%, transparent);
+  }
+
+  @media (max-width: 720px) {
+    .section-heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .section-heading .more {
+      margin-left: 0;
+    }
+
+    .post-link {
+      grid-template-columns: 1fr;
+    }
+
+    .thumb {
+      width: 100%;
+    }
+  }
+</style>

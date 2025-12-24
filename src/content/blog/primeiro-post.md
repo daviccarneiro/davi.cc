@@ -3,7 +3,7 @@ title: O começo de tudo
 description: Sem trajeto, sem objetivo, sem expectativa - do jeito que a vida
   tem que ser às vezes.
 pubDate: 2025-12-23
-heroImage: /assets/B4E2495C-F3ED-40F1-8573-1F588B7CFB23.jpeg
+heroImage: ../../assets/B4E2495C-F3ED-40F1-8573-1F588B7CFB23.jpeg
 ---
 # Meu Primeiro Post
 
