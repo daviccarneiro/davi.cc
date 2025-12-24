@@ -23,7 +23,7 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
       <li class="post-item">
         <a class="post-link" href={`/blog/${post.slug}/`}>
           {post.data.heroImage && (
-            <Image src={post.data.heroImage} width={260} height={160} format="webp" alt={post.data.title} class="thumb" />
+            <Image src={post.data.heroImage} width={320} height={180} format="webp" alt={post.data.title} class="thumb" />
           )}
           <div class="meta">
             <h3>{post.data.title}</h3>
@@ -94,6 +94,8 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
   .thumb {
     width: 100%;
     height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
     border-radius: var(--border-radius-sm);
     display: block;
   }
