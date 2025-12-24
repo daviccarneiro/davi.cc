@@ -2,65 +2,62 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import myProfilePic from "../assets/davi.jpg"; 
-import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <aside class="profile-card" aria-label="Perfil de Davi Carneiro">
-  <div class="card-glow" aria-hidden="true"></div>
   <div class="card-surface">
-    <span class="badge">Professor & Desenvolvedor</span>
     <div class="profile-pic-frame">
       <Image
         src={myProfilePic}
         alt="Retrato de Davi Carneiro"
         class="profile-pic"
-        width={180}
-        height={180}
+        width={140}
+        height={140}
         format="webp"
       />
     </div>
 
-    <h1>Davi Carneiro</h1>
-    <p class="headline">Explorando ciência, código e educação.</p>
+    <h1>Davi Carneiro, MSc., PhDc.</h1>
 
     <nav class="main-nav" aria-label="Navegação principal">
-      <a href="/">Início</a>
-      <a href="/blog">Blog</a>
-      <a href="/contato">Contato</a>
+      {(() => {
+        const currentPath = Astro.url.pathname;
+        const isBlog = currentPath.startsWith('/blog');
+        return (
+          <>
+            <a href="/" class={currentPath === '/' ? 'is-active' : ''} data-i18n-key="nav.home">Início</a>
+            <a href="/blog" class={isBlog ? 'is-active' : ''} data-i18n-key="nav.blog">Blog</a>
+            <a href="/contato" class={currentPath === '/contato' ? 'is-active' : ''} data-i18n-key="nav.contact">Contato</a>
+          </>
+        );
+      })()}
     </nav>
 
     <div class="meta-grid">
       <div>
-        <span class="meta-label">Áreas</span>
-        <strong>IA • Educação • Web</strong>
-      </div>
-      <div>
-        <span class="meta-label">Base</span>
-        <strong>Fortaleza, Brasil</strong>
+        <span class="meta-label" data-i18n-key="meta.base">Base</span>
+        <strong data-i18n-key="meta.baseCity">João Pessoa, Brasil</strong>
       </div>
     </div>
 
     <div class="social-nav" aria-label="Redes sociais">
-      <a href="https://github.com/..." target="_blank" rel="noopener noreferrer" aria-label="Github"><Icon name="mdi:github" /></a>
-      <a href="https://linkedin.com/..." target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Icon name="mdi:linkedin" /></a>
-      <a href="https://researchgate.net/..." target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><Icon name="mdi:school-outline" /></a>
-      <a href="https://lattes.cnpq.br/..." target="_blank" rel="noopener noreferrer" aria-label="Lattes"><Icon name="mdi:account-box-outline" /></a>
+      <a href="https://github.com/daviccarneiro" target="_blank" rel="noopener noreferrer" aria-label="Github"><Icon name="mdi:github" /></a>
+      <a href="https://www.linkedin.com/in/davicc/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Icon name="mdi:linkedin" /></a>
+      <a href="https://www.researchgate.net/profile/Davi-Clementino-Carneiro?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><Icon name="mdi:school-outline" /></a>
+      <a href="/cv" aria-label="CV"><Icon name="mdi:file-document-outline" /></a>
     </div>
 
-    <div class="divider" aria-hidden="true"></div>
-    <ThemeToggle />
   </div>
 </aside>
 
 <style>
   .profile-card {
-    position: fixed;
-    top: var(--shell-padding);
-    left: var(--shell-padding);
+    position: sticky;
+    top: 0;
     width: min(var(--card-width), calc(100vw - 2 * var(--shell-padding)));
     max-width: 360px;
     z-index: 10;
-    pointer-events: none;
+    pointer-events: auto;
   }
 
   .card-surface {
@@ -74,62 +71,38 @@ import ThemeToggle from './ThemeToggle.astro';
     border-radius: 24px;
     background: var(--color-surface);
     border: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
-    box-shadow: var(--shadow-card);
-    backdrop-filter: blur(12px);
-  }
-
-  .card-glow {
-    position: absolute;
-    inset: -18%;
-    border-radius: 32px;
-    background: radial-gradient(circle at 25% 25%, rgba(37, 99, 235, 0.18), transparent 55%),
-                radial-gradient(circle at 75% 35%, rgba(15, 118, 110, 0.12), transparent 60%);
-    filter: blur(12px);
-    opacity: 0.65;
-    z-index: -1;
-  }
-
-  .badge {
-    align-self: flex-start;
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-weight: 600;
-    padding: 0.35rem 0.75rem;
-    border-radius: 999px;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(15, 118, 110, 0.08));
-    color: var(--color-text);
-    border: 1px solid color-mix(in oklab, var(--color-border) 55%, transparent);
+    box-shadow: none;
+    backdrop-filter: none;
+    will-change: opacity, transform;
+    animation: fade-in-soft 420ms ease-out both;
+    transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
   }
 
   .profile-pic-frame {
     display: inline-flex;
     border-radius: 50%;
     padding: 0.5rem;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.16), rgba(15, 118, 110, 0.12));
+    background: color-mix(in oklab, var(--color-bg) 85%, transparent);
     border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
-    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.15);
+    box-shadow: none;
   }
 
   .profile-pic {
-    width: clamp(140px, 14vw + 60px, 180px);
-    height: clamp(140px, 14vw + 60px, 180px);
+    width: clamp(120px, 10vw + 40px, 140px);
+    height: clamp(120px, 10vw + 40px, 140px);
     border-radius: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.95);
-    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+    border: 4px solid #fff;
+    box-shadow: none;
   }
 
   h1 {
-    font-size: clamp(1.75rem, 1.2vw + 1.6rem, 2rem);
+    font-size: clamp(1.25rem, 0.8vw + 1.1rem, 1.6rem);
     text-align: center;
-  }
-
-  .headline {
-    text-align: center;
-    color: color-mix(in oklab, var(--color-text) 85%, transparent);
-    margin: 0;
-    font-size: 0.95rem;
-    max-width: 18ch;
+    white-space: normal;
+    max-width: 100%;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.2;
   }
 
   .main-nav {
@@ -146,23 +119,27 @@ import ThemeToggle from './ThemeToggle.astro';
     font-weight: 600;
     padding: 0.65rem 0.75rem;
     border-radius: 12px;
-    background: color-mix(in oklab, var(--color-bg) 75%, transparent);
+    background: color-mix(in oklab, var(--color-bg) 92%, transparent);
     border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
     color: var(--color-text);
-    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
+
+  .main-nav a.is-active {
+    background: color-mix(in oklab, var(--color-bg) 85%, transparent);
+    border-color: color-mix(in oklab, var(--color-border) 85%, transparent);
   }
 
   .main-nav a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.16);
-    border-color: color-mix(in oklab, var(--color-primary) 45%, transparent);
+    background: color-mix(in oklab, var(--color-bg) 82%, transparent);
+    border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
   }
 
   .meta-grid {
     width: 100%;
     display: grid;
     gap: 0.75rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     text-align: left;
   }
 
@@ -196,30 +173,18 @@ import ThemeToggle from './ThemeToggle.astro';
     border-radius: 12px;
     border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
     color: var(--color-text);
-    background: color-mix(in oklab, var(--color-bg) 78%, transparent);
-    transition: transform 180ms ease, box-shadow 180ms ease, color 180ms ease;
+    background: color-mix(in oklab, var(--color-bg) 92%, transparent);
+    transition: background-color 180ms ease, color 180ms ease;
   }
 
   .social-nav a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
-    color: var(--color-primary);
+    background: color-mix(in oklab, var(--color-bg) 82%, transparent);
+    color: inherit;
   }
 
   .social-nav :global(svg) {
     width: 22px;
     height: 22px;
-  }
-
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-border) 70%, transparent), transparent);
-  }
-
-  :global(.theme-toggle) {
-    width: 100%;
-    justify-content: center;
   }
 
   @media (max-width: 1060px) {

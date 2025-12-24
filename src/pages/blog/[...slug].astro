@@ -34,7 +34,7 @@ const { Content } = await post.render();
 
     <header class="post-header">
       <h1>{post.data.title}</h1>
-      <p class="post-meta">Publicado em {post.data.pubDate.toLocaleDateString('pt-BR')}</p>
+      <p class="post-meta"><span data-i18n-key="blog.postedOn">Publicado em</span> <span class="date" data-date={post.data.pubDate.toISOString()}></span></p>
     </header>
 
     <div class="post-body">

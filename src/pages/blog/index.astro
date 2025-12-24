@@ -13,10 +13,9 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 <Layout title="Blog | davi.cc">
   <header class="page-header">
     <div>
-      <p class="kicker">Blog</p>
-      <h1>Artigos e Postagens</h1>
+      <p class="kicker" data-i18n-key="blog.header.kicker">Blog</p>
     </div>
-    <p class="lead">Nada daqui tem DOI nem qualis, mas é digitado com o coração e (quase) sem IA.</p>
+    <p class="lead" data-i18n-key="blog.header.lead">Nada daqui tem DOI nem qualis, mas é digitado com o coração e (quase) sem IA.</p>
   </header>
 
   <ul class="post-list">
@@ -29,7 +28,7 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
           <div class="meta">
             <h3>{post.data.title}</h3>
             <p>{post.data.description}</p>
-            <span class="date">{post.data.pubDate.toLocaleDateString('pt-BR')}</span>
+            <span class="date" data-date={post.data.pubDate.toISOString()}></span>
           </div>
         </a>
       </li>
@@ -40,9 +39,9 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 <style>
   .page-header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem clamp(1rem, 4vw, 2.5rem);
-    align-items: flex-end;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
   }
 
   .kicker {
@@ -54,8 +53,10 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
   }
 
   .page-header .lead {
-    max-width: 28ch;
     font-size: 1.05rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .post-list {

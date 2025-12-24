@@ -4,31 +4,31 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="Contato | davi.cc">
   <section class="contact">
-    <h1>Fale comigo</h1>
-    <p class="subtitle">Tem uma ideia, projeto ou dúvida? Envie uma mensagem.</p>
+    
+    <p class="subtitle" data-i18n-key="contact.subtitle">Tem uma ideia, projeto ou dúvida? Envie uma mensagem.</p>
 
     <form class="contact-form" id="contact-form" novalidate>
       <div class="field">
-        <label for="name">Nome</label>
-        <input type="text" id="name" name="name" required placeholder="Seu nome" />
+        <label for="name" data-i18n-key="contact.nameLabel">Nome</label>
+        <input type="text" id="name" name="name" required placeholder="Seu nome" data-i18n-placeholder="contact.namePh" />
       </div>
 
       <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required placeholder="voce@exemplo.com" />
+        <label for="email" data-i18n-key="contact.emailLabel">Email</label>
+        <input type="email" id="email" name="email" required placeholder="voce@exemplo.com" data-i18n-placeholder="contact.emailPh" />
       </div>
 
       <div class="field">
-        <label for="subject">Assunto</label>
-        <input type="text" id="subject" name="subject" placeholder="Sobre o que é?" />
+        <label for="subject" data-i18n-key="contact.subjectLabel">Assunto</label>
+        <input type="text" id="subject" name="subject" placeholder="Sobre o que é?" data-i18n-placeholder="contact.subjectPh" />
       </div>
 
       <div class="field">
-        <label for="message">Mensagem</label>
-        <textarea id="message" name="message" required rows="6"  placeholder="Escreva sua mensagem..."></textarea>
+        <label for="message" data-i18n-key="contact.messageLabel">Mensagem</label>
+        <textarea id="message" name="message" required rows="6"  placeholder="Escreva sua mensagem..." data-i18n-placeholder="contact.messagePh"></textarea>
       </div>
 
-      <button type="submit" class="btn-primary" id="submit-btn">Enviar</button>
+      <button type="submit" class="btn-primary" id="submit-btn" data-i18n-key="contact.submit">Enviar</button>
       <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
     </form>
   </section>
@@ -153,7 +153,8 @@ import Layout from '../layouts/Layout.astro';
 
         formNode.addEventListener('submit', async (e) => {
           e.preventDefault();
-          setStatus('Enviando...');
+          const t = (window as any).__i18n?.t || ((key: string) => key);
+          setStatus(t('contact.status.sending'));
           submitBtnNode.disabled = true;
 
           try {
@@ -174,10 +175,10 @@ import Layout from '../layouts/Layout.astro';
             });
 
             if (response.ok) {
-              setStatus('Obrigado! Sua mensagem foi enviada com sucesso.', 'success');
+              setStatus(t('contact.status.success'), 'success');
               formNode.reset();
             } else {
-              let errorMsg = 'Não foi possível enviar. Tente novamente mais tarde.';
+              let errorMsg = t('contact.status.error');
               try {
                 const data = await response.json();
                 if (data && (data.error || data.message)) {
@@ -187,7 +188,8 @@ import Layout from '../layouts/Layout.astro';
               setStatus(errorMsg, 'error');
             }
           } catch {
-            setStatus('Erro de rede. Verifique sua conexão e tente novamente.', 'error');
+            const t = (window as any).__i18n?.t || ((key: string) => key);
+            setStatus(t('contact.status.network'), 'error');
           } finally {
             submitBtnNode.disabled = false;
           }

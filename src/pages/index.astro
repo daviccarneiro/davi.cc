@@ -11,8 +11,6 @@ const posts = (await getCollection('blog'))
 
 <Layout title="davi.cc | Portfólio e Blog">
   <section class="intro">
-    <p class="kicker">Curiosidade é a primeira fagulha da mudança.</p>
-    <h1>Pesquisa, código e educação com propósito.</h1>
     <p>
       Não sou ninguém que dispense apresentações, tampouco Forbes Under30 ou qualquer outra grande nomeação. Mas sou e tento ser bom no que faço.
     </p>
@@ -20,8 +18,8 @@ const posts = (await getCollection('blog'))
 
   <section class="recent">
     <div class="section-heading">
-      <h2>Postagens recentes</h2>
-      <a class="more" href="/blog">Ver tudo</a>
+      <h2 data-i18n-key="home.recent">Postagens recentes</h2>
+      <a class="more" href="/blog" data-i18n-key="home.viewAll">Ver tudo</a>
     </div>
     <ul class="recent-posts">
       {posts.map((post) => (
@@ -49,18 +47,6 @@ const posts = (await getCollection('blog'))
     gap: 0.75rem;
   }
 
-  .kicker {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-weight: 600;
-    color: color-mix(in oklab, var(--color-text) 55%, transparent);
-  }
-
-  .intro h1 {
-    font-size: clamp(2.25rem, 1.1vw + 2rem, 2.75rem);
-  }
-
   .recent {
     display: flex;
     flex-direction: column;
@@ -77,11 +63,12 @@ const posts = (await getCollection('blog'))
     margin-left: auto;
     font-size: 0.95rem;
     font-weight: 600;
-    color: color-mix(in oklab, var(--color-primary) 85%, transparent);
+    color: inherit;
+    text-decoration: underline;
   }
 
   .section-heading .more:hover {
-    text-decoration: underline;
+    opacity: 0.8;
   }
 
   .recent-posts {
@@ -94,12 +81,12 @@ const posts = (await getCollection('blog'))
 
   .post-item {
     position: relative;
-    background: color-mix(in oklab, var(--color-surface) 90%, transparent);
+    background: color-mix(in oklab, var(--color-surface) 96%, transparent);
     border-radius: var(--border-radius-md);
     border: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
-    box-shadow: 0 18px 45px rgba(38, 56, 120, 0.14);
+    box-shadow: none;
     overflow: hidden;
-    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    transition: background-color 200ms ease, border-color 200ms ease;
   }
 
   .post-link {
@@ -112,9 +99,8 @@ const posts = (await getCollection('blog'))
   }
 
   .post-item:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 26px 55px rgba(50, 76, 155, 0.18);
-    border-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+    background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+    border-color: color-mix(in oklab, var(--color-border) 75%, transparent);
   }
 
   .thumb {

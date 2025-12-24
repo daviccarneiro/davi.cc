@@ -23,21 +23,7 @@ const { title = "Portfólio" } = Astro.props;
 
 		<title>{title}</title>
 
-    <script is:inline>
-      // Esta função é auto-executada
-      (function() {
-        // 1. Verificamos se o usuário JÁ escolheu um tema
-        const theme = localStorage.getItem('theme');
-        
-        // 2. Verificamos a preferência do Sistema Operacional
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-        if (theme === 'dark' || (!theme && prefersDark)) {
-          // 3. Aplicamos a classe ANTES da página ser pintada
-          document.documentElement.classList.add('dark');
-        }
-      })();
-    </script>
+    
 
 	</head>
   <body>
@@ -49,40 +35,186 @@ const { title = "Portfólio" } = Astro.props;
         <slot />
       </main>
     </div>
-    <footer class="site-footer">feito com ❤️ por Davi</footer>
+    <footer class="site-footer">
+      <div class="footer-row">
+        <span data-i18n-key="footer.made">feito com ❤️ por Davi</span>
+        <div class="lang-toggle" aria-label="Language">
+          <button type="button" class="lang-btn" data-set-lang="pt-BR" aria-label="Português (Brasil)">🇧🇷 PT-BR</button>
+          <button type="button" class="lang-btn" data-set-lang="en-US" aria-label="English (United States)">🇺🇸 EN-US</button>
+        </div>
+      </div>
+    </footer>
 
     <script>
-      // --- Definição das Funções ---
-
-      // (Função 2: handleThemeToggle, permanece a mesma)
-      const handleThemeToggle = () => {
-        document.documentElement.classList.toggle('dark');
-        const isDark = document.documentElement.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      const translations = {
+        'pt-BR': {
+          'nav.home': 'Início',
+          'nav.blog': 'Blog',
+          'nav.contact': 'Contato',
+          'meta.base': 'Base',
+          'meta.baseCity': 'João Pessoa, Brasil',
+          'home.recent': 'Postagens recentes',
+          'home.viewAll': 'Ver tudo',
+          'footer.made': 'feito com ❤️ por Davi',
+          'title.home': 'Início',
+          'title.blog': 'Blog',
+          'title.contact': 'Contato',
+          'blog.header.kicker': 'Blog',
+          'blog.header.title': 'Artigos e Postagens',
+          'blog.header.lead': 'Nada daqui tem DOI nem qualis, mas é digitado com o coração e (quase) sem IA.',
+          'blog.postedOn': 'Publicado em',
+          'contact.title': 'Fale comigo',
+          'contact.subtitle': 'Tem uma ideia, projeto ou dúvida? Envie uma mensagem.',
+          'contact.nameLabel': 'Nome',
+          'contact.emailLabel': 'Email',
+          'contact.subjectLabel': 'Assunto',
+          'contact.messageLabel': 'Mensagem',
+          'contact.submit': 'Enviar',
+          'contact.namePh': 'Seu nome',
+          'contact.emailPh': 'voce@exemplo.com',
+          'contact.subjectPh': 'Sobre o que é?',
+          'contact.messagePh': 'Escreva sua mensagem...',
+          'contact.status.sending': 'Enviando...',
+          'contact.status.success': 'Obrigado! Sua mensagem foi enviada com sucesso.',
+          'contact.status.error': 'Não foi possível enviar. Tente novamente mais tarde.',
+          'contact.status.network': 'Erro de rede. Verifique sua conexão e tente novamente.'
+        },
+        'en-US': {
+          'nav.home': 'Home',
+          'nav.blog': 'Blog',
+          'nav.contact': 'Contact',
+          'meta.base': 'Base',
+          'meta.baseCity': 'João Pessoa, Brazil',
+          'home.recent': 'Recent posts',
+          'home.viewAll': 'View all',
+          'footer.made': 'made with ❤️ by Davi',
+          'title.home': 'Home',
+          'title.blog': 'Blog',
+          'title.contact': 'Contact',
+          'blog.header.kicker': 'Blog',
+          'blog.header.title': 'Articles and Posts',
+          'blog.header.lead': 'None of this has a DOI or qualis, but it is typed with heart and (almost) no AI.',
+          'blog.postedOn': 'Published on',
+          'contact.title': 'Contact me',
+          'contact.subtitle': 'Have an idea, project, or question? Send a message.',
+          'contact.nameLabel': 'Name',
+          'contact.emailLabel': 'Email',
+          'contact.subjectLabel': 'Subject',
+          'contact.messageLabel': 'Message',
+          'contact.submit': 'Send',
+          'contact.namePh': 'Your name',
+          'contact.emailPh': 'you@example.com',
+          'contact.subjectPh': 'What is it about?',
+          'contact.messagePh': 'Write your message...',
+          'contact.status.sending': 'Sending...',
+          'contact.status.success': 'Thank you! Your message has been sent.',
+          'contact.status.error': 'Could not send. Please try again later.',
+          'contact.status.network': 'Network error. Check your connection and try again.'
+        }
       };
-      
-      // (Função 3: initThemeToggle, permanece a mesma)
-      const initThemeToggle = () => {
-        const buttons = document.querySelectorAll('[data-theme-toggle]');
-        buttons.forEach((btn) => {
-          btn.removeEventListener('click', handleThemeToggle);
-          btn.addEventListener('click', handleThemeToggle);
+
+      let currentLang = 'en-US';
+
+      const formatDates = (lang) => {
+        document.querySelectorAll('.date[data-date]').forEach((el) => {
+          const iso = el.getAttribute('data-date');
+          if (!iso) return;
+          const date = new Date(iso);
+          try {
+            el.textContent = date.toLocaleDateString(lang);
+          } catch {
+            el.textContent = date.toLocaleDateString('en-US');
+          }
         });
       };
 
-      // (Removido) initMobileMenu agora vive no Header.astro
+      const setPageTitle = (lang) => {
+        const dict = translations[lang] || translations['en-US'];
+        const path = location.pathname;
+        let pageName = '';
+        if (path === '/' || path === '') {
+          pageName = dict['title.home'] || 'Home';
+        } else if (path === '/blog' || path === '/blog/') {
+          pageName = dict['title.blog'] || 'Blog';
+        } else if (path.startsWith('/blog/')) {
+          const postTitleNode = document.querySelector('article.post-article h1');
+          const postTitle = postTitleNode && postTitleNode.textContent ? postTitleNode.textContent.trim() : '';
+          pageName = postTitle || (dict['title.blog'] || 'Blog');
+        } else if (path.startsWith('/contato')) {
+          pageName = dict['title.contact'] || 'Contact';
+        } else {
+          pageName = document.title.replace(/^.*\|\s*/, '') || 'Page';
+        }
+        document.title = `davi.cc | ${pageName}`;
+      };
 
-      // --- Execução ---
+      const applyLanguage = (lang) => {
+        const dict = translations[lang] || translations['en-US'];
+        currentLang = lang;
+        document.documentElement.setAttribute('lang', lang.startsWith('pt') ? 'pt-BR' : 'en');
+        document.querySelectorAll('[data-i18n-key]').forEach((el) => {
+          const key = el.getAttribute('data-i18n-key');
+          if (key && dict[key]) el.textContent = dict[key];
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+          const key = el.getAttribute('data-i18n-placeholder');
+          if (key && dict[key] && 'placeholder' in el) {
+            el.placeholder = dict[key];
+          }
+        });
+        formatDates(lang);
+        setPageTitle(lang);
+        localStorage.setItem('lang', lang);
+        window.__i18n = {
+          t: (key) => (translations[currentLang] && translations[currentLang][key]) || key,
+          getLang: () => currentLang
+        };
+      };
 
-      // 1. Roda na CARGA INICIAL
-      initThemeToggle();
+      const initLang = async () => {
+        const stored = localStorage.getItem('lang');
+        if (stored && translations[stored]) {
+          applyLanguage(stored);
+          return;
+        }
+        let detected = null;
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 1200);
+          const resp = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+          clearTimeout(timeout);
+          if (resp.ok) {
+            const data = await resp.json();
+            detected = data && data.country_code === 'BR' ? 'pt-BR' : 'en-US';
+          }
+        } catch (_) {
+          // ignore network errors, fallback to navigator
+        }
+        if (!detected) {
+          detected = (navigator.language || 'en-US').startsWith('pt') ? 'pt-BR' : 'en-US';
+        }
+        applyLanguage(detected);
+      };
 
-      // 2. Roda DEPOIS que tudo terminou
+      const initLangToggle = () => {
+        document.querySelectorAll('.lang-btn[data-set-lang]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const lang = btn.getAttribute('data-set-lang') || 'en-US';
+            applyLanguage(lang);
+          });
+        });
+      };
+
+      initLang();
+      initLangToggle();
       document.addEventListener('astro:page-load', () => {
-        // Re-anexa o listener ao botão persistido
-        initThemeToggle();
+        initLangToggle();
+        formatDates(currentLang);
+        setPageTitle(currentLang);
       });
     </script>
+ 
+    
 
         </body>
 </html>

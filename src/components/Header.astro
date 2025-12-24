@@ -1,6 +1,5 @@
 ---
 import { Image } from 'astro:assets';
-import ThemeToggle from './ThemeToggle.astro';
 import { Icon } from 'astro-icon/components';
 import myProfilePic from "../assets/davi.jpg";
 ---
@@ -27,16 +26,15 @@ import myProfilePic from "../assets/davi.jpg";
 </header>
 
 <nav id="mobile-menu" class="mobile-menu" aria-label="Menu principal">
-  <a href="/">Início</a>
-  <a href="/blog">Blog</a>
-  <a href="/contato">Contato</a>
+  <a href="/" data-i18n-key="nav.home">Início</a>
+  <a href="/blog" data-i18n-key="nav.blog">Blog</a>
+  <a href="/contato" data-i18n-key="nav.contact">Contato</a>
   <div class="social-row">
-    <a href="https://github.com/..." target="_blank" rel="noopener noreferrer" aria-label="Github"><Icon name="mdi:github" /></a>
-    <a href="https://linkedin.com/..." target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Icon name="mdi:linkedin" /></a>
-    <a href="https://researchgate.net/..." target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><Icon name="mdi:school-outline" /></a>
-    <a href="https://lattes.cnpq.br/..." target="_blank" rel="noopener noreferrer" aria-label="Lattes"><Icon name="mdi:account-box-outline" /></a>
+    <a href="https://github.com/daviccarneiro" target="_blank" rel="noopener noreferrer" aria-label="Github"><Icon name="mdi:github" /></a>
+    <a href="https://www.linkedin.com/in/davicc/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Icon name="mdi:linkedin" /></a>
+    <a href="https://www.researchgate.net/profile/Davi-Clementino-Carneiro?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><Icon name="mdi:school-outline" /></a>
+    <a href="/cv" aria-label="CV"><Icon name="mdi:file-document-outline" /></a>
     <div class="spacer"></div>
-    <ThemeToggle />
   </div>
 </nav>
 
@@ -119,7 +117,7 @@ import myProfilePic from "../assets/davi.jpg";
       border-radius: var(--border-radius);
     }
     .mobile-menu a:hover {
-      background: var(--color-bg-hover);
+      background: color-mix(in oklab, var(--color-bg) 82%, transparent);
     }
 
     .mobile-menu.is-open {
@@ -142,9 +140,6 @@ import myProfilePic from "../assets/davi.jpg";
     }
     .social-row .spacer {
       margin-left: auto;
-    }
-    .social-row :global(.theme-toggle) {
-      display: inline-flex;
     }
   }
 </style>

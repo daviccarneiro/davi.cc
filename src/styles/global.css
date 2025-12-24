@@ -5,43 +5,28 @@
   color-scheme: light;
 
   /* Paleta base */
-  --color-text: #1f2736;
-  --color-text-soft: color-mix(in oklab, var(--color-text) 82%, transparent);
-  --color-bg: #f3f5f9;
-  --color-primary: #2563eb;
-  --color-border: #d7dbe5;
-  --color-surface: #ffffff;
+  --color-text: #1f1f1f;
+  --color-text-soft: color-mix(in oklab, var(--color-text) 75%, transparent);
+  --color-bg: #f4f4f5;
+  --color-primary: #6b7280; /* neutral gray */
+  --color-border: #e5e7eb;
+  --color-surface: #f9f9f9;
 
   /* Tipografia e layout */
   --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-family-mono: 'JetBrains Mono', monospace;
   --content-width: 880px;
-  --card-width: 340px;
+  --card-width: 280px;
   --shell-max-width: 1320px;
   --shell-padding: clamp(2rem, 3vw + 1.25rem, 4rem);
 
   /* Efeitos */
-  --shadow-card: 0 20px 60px rgba(15, 23, 42, 0.08);
-  --shadow-surface: 0 18px 46px rgba(15, 23, 42, 0.08);
+  --shadow-card: none;
+  --shadow-surface: none;
   --border-radius-lg: 28px;
   --border-radius-md: 18px;
   --border-radius-sm: 12px;
   --border-radius: var(--border-radius-sm);
-}
-
-/* 2. Variáveis do Modo Escuro */
-html.dark {
-  color-scheme: dark;
-
-  --color-text: #f5f7ff;
-  --color-text-soft: color-mix(in oklab, var(--color-text) 68%, transparent);
-  --color-bg: #070b16;
-  --color-primary: #5b8cff;
-  --color-border: rgba(92, 122, 189, 0.35);
-  --color-surface: rgba(12, 17, 28, 0.92);
-
-  --shadow-card: 0 30px 80px rgba(8, 12, 30, 0.55);
-  --shadow-surface: 0 30px 90px rgba(3, 7, 20, 0.65);
 }
 
 *, *::before, *::after {
@@ -51,7 +36,7 @@ html.dark {
 body {
   font-family: var(--font-family-sans);
   color: var(--color-text);
-  background: linear-gradient(180deg, #fcfdff 0%, #f2f4f8 65%, #eceff4 100%);
+  background: var(--color-bg);
   margin: 0;
   min-height: 100vh;
   display: flex;
@@ -77,19 +62,19 @@ p {
 }
 
 a {
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color 180ms ease;
+  color: inherit;
+  text-decoration: underline;
+  transition: opacity 180ms ease;
 }
 
 a:hover {
-  color: color-mix(in oklab, var(--color-primary) 80%, white);
+  opacity: 0.8;
 }
 
 .app-shell {
   display: flex;
   align-items: flex-start;
-  gap: clamp(2.5rem, 4vw, 4.5rem);
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
   max-width: min(var(--shell-max-width), 100%);
   flex: 1;
   margin: 0 auto;
@@ -97,25 +82,26 @@ a:hover {
 }
 
 .card-slot {
-  flex: 0 0 min(var(--card-width), 360px);
-  width: min(var(--card-width), 360px);
-  min-height: 1px;
+  display: none;
 }
 
 main.content {
   position: relative;
-  flex: 1;
-  max-width: min(var(--content-width), 100%);
-  margin-left: auto;
+  flex: 0 0 auto;
+  width: min(var(--content-width), 100%);
+  margin-left: 0;
   padding: clamp(2rem, 3vw + 1rem, 3rem);
   border-radius: var(--border-radius-lg);
   background: var(--color-surface);
   border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
   box-shadow: var(--shadow-surface);
-  backdrop-filter: blur(16px);
+  backdrop-filter: none;
   display: flex;
   flex-direction: column;
   gap: clamp(1.75rem, 2vw + 1rem, 2.5rem);
+  will-change: opacity, transform;
+  animation: fade-in-soft 420ms ease-out both;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
 
 main.content > * {
@@ -153,6 +139,52 @@ main.content ol {
   text-align: center;
   font-size: 0.95rem;
   color: var(--color-text-soft);
+}
+
+.site-footer .footer-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.site-footer .lang-toggle {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.site-footer .lang-btn {
+  appearance: none;
+  border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+  background: color-mix(in oklab, var(--color-bg) 92%, transparent);
+  color: inherit;
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+.site-footer .lang-btn:hover {
+  background: color-mix(in oklab, var(--color-bg) 82%, transparent);
+  border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
+}
+
+.card-surface:hover,
+main.content:hover {
+  border-color: color-mix(in oklab, var(--color-border) 85%, transparent);
+  background: color-mix(in oklab, var(--color-surface) 98%, transparent);
+  transform: translateY(-1px);
+}
+
+@keyframes fade-in-soft {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Layout responsivo */
