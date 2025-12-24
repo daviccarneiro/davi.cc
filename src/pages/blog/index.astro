@@ -54,9 +54,6 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   .page-header .lead {
     font-size: 1.05rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .post-list {
@@ -88,6 +85,7 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
     gap: 1.25rem;
     padding: clamp(1rem, 1.5vw + 0.75rem, 1.5rem);
     color: inherit;
+    text-decoration: none;
     align-items: center;
   }
 
