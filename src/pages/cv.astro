@@ -109,18 +109,26 @@ import Layout from '../layouts/Layout.astro';
       border: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
       background: color-mix(in oklab, var(--color-bg) 92%, transparent);
       color: inherit;
+      font-size: 0.95rem;
+      text-decoration: none;
       padding: 0.55rem 0.9rem;
       border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
-      transition: background-color 180ms ease, border-color 180ms ease;
+      transition: background-color 180ms ease, border-color 180ms ease, opacity 180ms ease;
     }
     .btn:hover {
       background: color-mix(in oklab, var(--color-bg) 82%, transparent);
       border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
+      opacity: 0.8;
     }
     .btn.outline {
-      background: transparent;
+      background: color-mix(in oklab, var(--color-bg) 92%, transparent);
+    }
+    .btn.outline:hover {
+      background: color-mix(in oklab, var(--color-bg) 82%, transparent);
+      border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
+      opacity: 0.8;
     }
 
     /* Print styles: focus only on CV content */
@@ -144,6 +152,14 @@ import Layout from '../layouts/Layout.astro';
       }
       .item {
         break-inside: avoid;
+      }
+    }
+    @media (max-width: 768px) {
+      .doc-frame {
+        height: min(60vh, 520px);
+      }
+      .cv-actions {
+        justify-content: center;
       }
     }
   </style>
