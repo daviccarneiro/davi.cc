@@ -2,6 +2,7 @@
 title: Antônia Clementino (Vó)
 description: Uma carta aberta escrita sob lágrimas e cansaço.
 pubDate: 2026-01-05
+heroImage: /assets/IMG_6025.jpeg
 ---
 Talvez vocês não saibam, mas eu tendo a ser muito frio na maioria das situações. Hoje não foi diferente, eu estive sério pela maior parte do tempo. Tive que ser ombro forte e firme para minha mãe e meus tios, comprar almoço para todos presentes, e ficar a disposição de qualquer coisa que fosse necessário.
 
@@ -15,7 +16,7 @@ Acontece que a coroa era pra minha avó sim. Enviada por Larissa, Yanko, Giulian
 
 É que não foi apenas uma coroa de flores. Pra mim, foi a mesma sensação de respirar fora d’água depois de um mergulho profundo, ou o primeiro gole d’água após um dia cansativo. Foi um “isso é a vida” em meio a morte.
 
-Hoje, dia 5 de Janeiro de 2026, me despeço de Antônia de Figueredo Clementino, mãe de 8 filhos, avó de mais de 10 netos, depois de meses de sofrimento, e uma missão mais que cumprida. Que fique bem claro, os meses de sofrimento teria sido infinitamente piores sem o apoio de todos que tentaram se fazer presentes, cada um do seu jeito e ao seu alcance.
+Hoje, dia 5 de Janeiro de 2026, me despeço de Antônia de Figueredo Clementino, mãe de 8 filhos, avó de mais de 10 netos, depois de meses de sofrimento, e uma missão mais que cumprida. Que fique bem claro, os meses de sofrimento teriam sido infinitamente piores sem o apoio de todos que tentaram se fazer presentes, cada um do seu jeito e ao seu alcance.
 
 Como ela sempre dizia, parafraseando filósofos do estoicismo:
 “Estudar é amargo, mas os frutos são doces”.
