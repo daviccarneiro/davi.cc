@@ -1,10 +1,10 @@
 media:
-  # Pasta padrão para gerenciar imagens (opcional, mas útil)
   - name: images
     label: Imagens
     input: src/assets
-    output: /assets
     path: src/assets
+    # removed: output: /assets
+    relative: true
 
 content:
   - name: blog
@@ -13,12 +13,8 @@ content:
     path: src/content/blog
     format: yaml-frontmatter
     subfolders: false
-
-    # Define como o nome do arquivo é gerado ao criar novo post
-    # Usa o campo primário (title) + data
     filename: "{year}-{month}-{day}-{primary}.md"
 
-    # Configurações da listagem no CMS
     view:
       primary: title
       fields: [ title, pubDate, description ]
@@ -45,10 +41,10 @@ content:
         label: Imagem de Capa
         type: image
         required: false
-        # Abre o seletor diretamente em src/assets
         path: src/assets
+        relative: true
+        value_template: "../../assets/{{filename}}"
 
-      # Conteúdo do arquivo (corpo em Markdown)
       - name: body
         label: Conteúdo
         type: text
