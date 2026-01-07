@@ -49,3 +49,39 @@ content:
         label: Conteúdo
         type: text
         required: true
+
+  - name: resources
+    label: Recursos
+    type: collection
+    path: src/content/resources
+    format: yaml-frontmatter
+    subfolders: false
+    filename: "{primary}.json"
+
+    view:
+      primary: url
+      fields: [ url, overrideTitle, overrideDescription ]
+
+    fields:
+      - name: url
+        label: URL
+        type: string
+        required: true
+
+      - name: overrideTitle
+        label: Título (opcional)
+        type: string
+        required: false
+
+      - name: overrideDescription
+        label: Descrição (opcional)
+        type: text
+        required: false
+
+      - name: overrideImage
+        label: Imagem (opcional)
+        type: image
+        required: false
+        path: src/assets
+        relative: true
+        value_template: "../../assets/{{filename}}"

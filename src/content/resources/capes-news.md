@@ -1,0 +1,5 @@
+---
+url: "https://www.gov.br/capes/pt-br/assuntos/noticias/inteligencia-artificial-facilita-deteccao-de-carie"
+---
+
+

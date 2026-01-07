@@ -23,26 +23,7 @@ const start = (currentPage - 1) * pageSize;
 const end = start + pageSize;
 const pageResources = resources.slice(start, end);
 
-const fetchOgData = async (url: string) => {
-  try {
-    const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), 2000);
-    const resp = await fetch(url, { redirect: 'follow', signal: controller.signal });
-    clearTimeout(t);
-    const html = await resp.text();
-    const pick = (prop: string) => {
-      const re = new RegExp(`<meta[^>]+property=["']${prop}["'][^>]+content=["']([^"']+)["'][^>]*>`, 'i');
-      const m = html.match(re);
-      return m ? m[1] : '';
-    };
-    const ogTitle = pick('og:title') || '';
-    const ogDesc = pick('og:description') || '';
-    const ogImage = pick('og:image') || '';
-    return { ogTitle, ogDesc, ogImage };
-  } catch {
-    return { ogTitle: '', ogDesc: '', ogImage: '' };
-  }
-};
+// No live OG fetch; rely on CMS-provided overrides and placeholders
 
 const truncate = (text: string, max: number) => {
   if (!text) return '';
@@ -51,21 +32,18 @@ const truncate = (text: string, max: number) => {
   return str.slice(0, max - 1).trimEnd() + '...';
 };
 
-const cards = await Promise.all(
-  pageResources.map(async (entry) => {
-    const { url, overrideTitle, overrideDescription, overrideImage } = entry.data;
-    const og = await fetchOgData(url);
-    return {
-      url,
-      title: truncate(overrideTitle || og.ogTitle || url, 64),
-      description: truncate(overrideDescription || og.ogDesc || '', 160),
-      image: overrideImage || og.ogImage || '',
-      host: (() => {
-        try { return new URL(url).host; } catch { return ''; }
-      })()
-    };
-  })
-);
+const cards = pageResources.map((entry) => {
+  const { url, overrideTitle, overrideDescription, overrideImage } = entry.data;
+  return {
+    url,
+    title: truncate(overrideTitle || url, 64),
+    description: truncate(overrideDescription || '', 160),
+    image: overrideImage || '',
+    host: (() => {
+      try { return new URL(url).host; } catch { return ''; }
+    })()
+  };
+});
 ---
 
 <Layout title="davi.cc | Resources">

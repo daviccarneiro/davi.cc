@@ -11,12 +11,13 @@ const blogCollection = defineCollection({
 })
 
 const resourcesCollection = defineCollection({
-    type: 'data',
-    schema: () => z.object({
+    type: 'content',
+    schema: ({ image }) => z.object({
         url: z.string().url(),
         overrideTitle: z.string().optional(),
         overrideDescription: z.string().optional(),
-        overrideImage: z.string().url().optional(),
+        // Allow either a local image path (string) or omit
+        overrideImage: z.string().optional(),
         tags: z.array(z.string()).optional(),
         date: z.string().or(z.date()).optional(),
     })
