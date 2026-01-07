@@ -3,7 +3,7 @@ media:
     label: Imagens
     input: src/assets
     path: src/assets
-    # removed: output: /assets
+    output: /assets
     relative: true
 
 content:
