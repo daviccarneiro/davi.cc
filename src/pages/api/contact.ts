@@ -7,7 +7,14 @@ export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { name, email, subject, message } = await request.json();
+    if (request.method !== 'POST') {
+      return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+        status: 405,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const { name, email, subject, message } = await request.json().catch(() => ({}));
 
     if (!name || !email || !message) {
       return new Response(
@@ -29,33 +36,53 @@ export const POST: APIRoute = async ({ request }) => {
       </div>
     `;
 
-    const fromAddress = import.meta.env.RESEND_FROM || '[NOVA MENSAGEM] - davi.cc <onboarding@resend.dev>';
+    const apiKey = import.meta.env.RESEND_API_KEY;
+    const fromAddress = import.meta.env.RESEND_FROM || 'davi.cc <onboarding@resend.dev>';
     const toAddress = import.meta.env.RESEND_TO || 'davicarneirodcc@gmail.com';
 
-    const { error } = await resend.emails.send({
+    if (!apiKey) {
+      console.error('[contact] Missing RESEND_API_KEY');
+      return new Response(JSON.stringify({ error: 'Email service not configured (API key missing).' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    if (!import.meta.env.RESEND_FROM) {
+      console.warn('[contact] RESEND_FROM not set. Falling back to onboarding@resend.dev (may be blocked for unverified domains).');
+    }
+
+    const { data, error } = await resend.emails.send({
       from: fromAddress,
       to: [toAddress],
       subject: title,
+      html,
+      // set both casings to be safe across SDK versions
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       reply_to: email,
-      html
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      replyTo: email,
     } as any);
 
     if (error) {
-      return new Response(JSON.stringify({ error: 'Falha ao enviar email.', errorDetail: String(error) }), {
+      console.error('[contact] Resend error:', error);
+      return new Response(JSON.stringify({ error: 'Falha ao enviar email.', detail: String(error) }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
+    return new Response(JSON.stringify({ ok: true, id: (data as any)?.id ?? null }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: 'Requisição inválida.' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } }
-    );
+    console.error('[contact] Unexpected error:', err);
+    return new Response(JSON.stringify({ error: 'Requisição inválida.', detail: String(err) }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };
 
