@@ -2,7 +2,7 @@
 title: Antônia Clementino (Vó)
 description: Uma carta aberta escrita sob lágrimas e cansaço.
 pubDate: 2026-01-05
-heroImage: /assets/IMG_6025.jpeg
+heroImage: ../../assets/IMG_6025.jpeg
 ---
 Talvez vocês não saibam, mas eu tendo a ser muito frio na maioria das situações. Hoje não foi diferente, eu estive sério pela maior parte do tempo. Tive que ser ombro forte e firme para minha mãe e meus tios, comprar almoço para todos presentes, e ficar a disposição de qualquer coisa que fosse necessário.
 
