@@ -143,9 +143,9 @@ const { title = "Portfólio" } = Astro.props;
           if (!iso) return;
           const date = new Date(iso);
           try {
-            el.textContent = date.toLocaleDateString(lang);
+            el.textContent = date.toLocaleDateString(lang, { timeZone: 'UTC' });
           } catch {
-            el.textContent = date.toLocaleDateString('en-US');
+            el.textContent = date.toLocaleDateString('en-US', { timeZone: 'UTC' });
           }
         });
       };

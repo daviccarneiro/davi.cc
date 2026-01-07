@@ -31,7 +31,7 @@ const posts = (await getCollection('blog'))
             <div class="meta">
               <h3>{post.data.title}</h3>
               <p>{post.data.description}</p>
-              <span class="date">{post.data.pubDate.toLocaleDateString('pt-BR')}</span>
+              <span class="date" data-date={post.data.pubDate.toISOString()}></span>
             </div>
           </a>
         </li>
