@@ -13,7 +13,7 @@ content:
     path: src/content/blog
     format: yaml-frontmatter
     subfolders: false
-    filename: "{year}-{month}-{day}-{primary}.md"
+    filename: "{primary}.md"
 
     view:
       primary: title
