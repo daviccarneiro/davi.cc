@@ -6,8 +6,9 @@ import '../styles/global.css';
 
 interface Props {
 	title: string;
+	noIndex?: boolean;
 }
-const { title = "Portfólio" } = Astro.props;
+const { title = "Portfólio", noIndex = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,6 +23,7 @@ const { title = "Portfólio" } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
 		<title>{title}</title>
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
 
     
 
@@ -53,6 +55,7 @@ const { title = "Portfólio" } = Astro.props;
           'nav.contact': 'Contato',
           'nav.resources': 'Recursos',
           'title.cv': 'Currículo',
+          'title.book': 'Agendar',
           'meta.base': 'Base',
           'meta.baseCity': 'João Pessoa, Brasil',
           'home.recent': 'Postagens recentes',
@@ -62,6 +65,8 @@ const { title = "Portfólio" } = Astro.props;
           'title.blog': 'Blog',
           'title.contact': 'Contato',
           'title.resources': 'Recursos',
+          'call.title': 'Agende uma conversa',
+          'call.description': 'Escolha um horário disponível no calendário para marcar uma conversa comigo.',
           'cv.education': 'Educação',
           'cv.work': 'Experiência',
           'cv.projects': 'Projetos',
@@ -96,6 +101,7 @@ const { title = "Portfólio" } = Astro.props;
           'nav.contact': 'Contact',
           'nav.resources': 'Resources',
           'title.cv': 'CV',
+          'title.book': 'Book a call',
           'meta.base': 'Location',
           'meta.baseCity': 'João Pessoa, Brazil',
           'home.recent': 'Recent posts',
@@ -105,6 +111,8 @@ const { title = "Portfólio" } = Astro.props;
           'title.blog': 'Blog',
           'title.contact': 'Contact',
           'title.resources': 'Resources',
+          'call.title': 'Book a call',
+          'call.description': 'Pick an available time slot on the calendar to schedule a call.',
           'cv.education': 'Education',
           'cv.work': 'Work Experience',
           'cv.projects': 'Major Projects',
@@ -162,6 +170,8 @@ const { title = "Portfólio" } = Astro.props;
           pageName = dict['title.resources'] || 'Resources';
         } else if (path.startsWith('/cv')) {
           pageName = dict['title.cv'] || 'CV';
+        } else if (path === '/book-a-call' || path === '/book-a-call/') {
+          pageName = dict['title.book'] || 'Book a call';
         } else if (path.startsWith('/blog/')) {
           const postTitleNode = document.querySelector('article.post-article h1');
           const postTitle = postTitleNode && postTitleNode.textContent ? postTitleNode.textContent.trim() : '';

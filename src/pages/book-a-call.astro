@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="davi.cc | Book a call" noIndex={true}>
+  <section class="call">
+    <header class="header">
+      <h1 data-i18n-key="call.title">Book a call</h1>
+      <p class="lead" data-i18n-key="call.description">Pick an available time slot on the calendar to schedule a call.</p>
+    </header>
+
+    <div class="embed">
+      <!-- Google Calendar Appointment Scheduling begin -->
+      <iframe
+        src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0uOEPEX_7as3Ak9kvVlmn7fMBs-2m3Y4VsiMkFz3QjBnxsnA5ntXQZpudRRrADcXoVaq-9xVLH?gv=true"
+        style="border: 0"
+        width="100%"
+        height="720"
+        frameborder="0"
+        loading="lazy"
+      ></iframe>
+      <!-- end Google Calendar Appointment Scheduling -->
+    </div>
+  </section>
+
+  <style>
+    .call {
+      display: grid;
+      gap: 1rem;
+    }
+    .header {
+      display: grid;
+      gap: 0.35rem;
+    }
+    .lead {
+      color: var(--color-text-soft);
+      font-size: 1.05rem;
+    }
+    .embed {
+      border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+      background: color-mix(in oklab, var(--color-surface) 96%, transparent);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+    }
+    .embed :global(iframe) {
+      display: block;
+      width: 100%;
+      height: 720px;
+      border: 0;
+      background: #fff;
+    }
+    @media (max-width: 768px) {
+      .embed :global(iframe) {
+        height: 640px;
+      }
+    }
+  </style>
+</Layout>
+
+
