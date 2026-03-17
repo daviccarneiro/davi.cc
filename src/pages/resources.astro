@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import resourcesMetaCacheRaw from '../data/resources-meta-cache.json';
 
 type Resource = {
   url: string;
@@ -12,6 +13,7 @@ type Resource = {
 };
 
 const resources = (await getCollection('resources')) as Array<{ id: string; data: Resource }>;
+const resourcesMetaCache = resourcesMetaCacheRaw as Record<string, { title?: string; image?: string }>;
 
 // Pagination (5 per page)
 const pageSize = 5;
@@ -23,8 +25,6 @@ const start = (currentPage - 1) * pageSize;
 const end = start + pageSize;
 const pageResources = resources.slice(start, end);
 
-// No live OG fetch; rely on CMS-provided overrides and placeholders
-
 const truncate = (text: string, max: number) => {
   if (!text) return '';
   const str = String(text).trim();
@@ -34,11 +34,14 @@ const truncate = (text: string, max: number) => {
 
 const cards = pageResources.map((entry) => {
   const { url, overrideTitle, overrideDescription, overrideImage } = entry.data;
+  const fetchedMeta = resourcesMetaCache[url] || {};
+  const resolvedTitle = overrideTitle || fetchedMeta.title || url;
+  const resolvedImage = overrideImage || fetchedMeta.image || '';
   return {
     url,
-    title: truncate(overrideTitle || url, 64),
+    title: truncate(resolvedTitle, 88),
     description: truncate(overrideDescription || '', 160),
-    image: overrideImage || '',
+    image: resolvedImage,
     host: (() => {
       try { return new URL(url).host; } catch { return ''; }
     })()
@@ -59,7 +62,7 @@ const cards = pageResources.map((entry) => {
             </div>
             <div class="meta">
               <h3>{card.title}</h3>
-              {card.description && <p>{card.description}</p>}
+              <p>{card.description}</p>
               {card.host && <span class="host">{card.host}</span>}
             </div>
           </a>
@@ -148,13 +151,18 @@ const cards = pageResources.map((entry) => {
     .meta h3 {
       margin: 0;
       font-size: clamp(1rem, 0.6vw + 0.95rem, 1.15rem);
-      white-space: nowrap;
+      line-height: 1.28;
+      min-height: calc(1.28em * 2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
     .meta p {
       margin: 0;
       color: var(--color-text-soft);
+      line-height: 1.35;
+      min-height: calc(1.35em * 2);
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -210,4 +218,3 @@ const cards = pageResources.map((entry) => {
     }
   </style>
 </Layout>
-

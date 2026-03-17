@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import myProfilePic from "../assets/davi.jpeg"; 
+
+const currentPath = Astro.url.pathname;
 ---
 
 <aside class="profile-card" aria-label="Perfil de Davi Carneiro">
@@ -20,18 +22,8 @@ import myProfilePic from "../assets/davi.jpeg";
     <h1>Davi Carneiro, MSc., PhDc.</h1>
 
     <nav class="main-nav" aria-label="Navegação principal">
-      {(() => {
-        const currentPath = Astro.url.pathname;
-        const isBlog = currentPath.startsWith('/blog');
-        return (
-          <>
-            <a href="/" class={currentPath === '/' ? 'is-active' : ''} data-i18n-key="nav.home">Início</a>
-            <a href="/blog" class={isBlog ? 'is-active' : ''} data-i18n-key="nav.blog">Blog</a>
-            <a href="/resources" class={currentPath.startsWith('/resources') ? 'is-active' : ''} data-i18n-key="nav.resources">Recursos</a>
-            <a href="/contact" class={currentPath === '/contact' ? 'is-active' : ''} data-i18n-key="nav.contact">Contato</a>
-          </>
-        );
-      })()}
+      <a href="/resources" class={currentPath.startsWith('/resources') ? 'is-active' : ''} data-i18n-key="nav.resources">Recursos</a>
+      <a href="/contact" class={currentPath === '/contact' ? 'is-active' : ''} data-i18n-key="nav.contact">Contato</a>
     </nav>
 
     <div class="meta-grid">
@@ -53,10 +45,10 @@ import myProfilePic from "../assets/davi.jpeg";
 
 <style>
   .profile-card {
-    position: sticky;
-    top: var(--shell-padding);
+    position: static;
     width: 100%;
     max-width: 360px;
+    margin: 0 auto;
     z-index: 10;
     pointer-events: auto;
   }
@@ -190,10 +182,9 @@ import myProfilePic from "../assets/davi.jpeg";
 
   @media (max-width: 1060px) {
     .profile-card {
-      position: static;
       width: 100%;
-      max-width: none;
-      margin: 0 auto 2rem;
+      max-width: 360px;
+      margin: 0 auto;
       pointer-events: auto;
     }
 
@@ -208,10 +199,6 @@ import myProfilePic from "../assets/davi.jpeg";
   }
 
   @media (max-width: 768px) {
-    .profile-card {
-      display: none;
-    }
-
     .card-surface {
       border-radius: 20px;
     }

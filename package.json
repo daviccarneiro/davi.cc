@@ -4,6 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "sync:resource-meta": "node scripts/sync-resource-meta-cache.mjs",
+    "prebuild": "npm run sync:resource-meta",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"

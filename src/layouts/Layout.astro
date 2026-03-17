@@ -7,8 +7,12 @@ import '../styles/global.css';
 interface Props {
 	title: string;
 	noIndex?: boolean;
+	homeMinimal?: boolean;
+	hideContentBack?: boolean;
 }
-const { title = "Portfólio", noIndex = false } = Astro.props;
+const { title = "Portfólio", noIndex = false, homeMinimal = false, hideContentBack = false } = Astro.props;
+const currentPath = Astro.url.pathname;
+const isContentPage = currentPath.startsWith('/resources') || currentPath.startsWith('/contact');
 ---
 
 <!doctype html>
@@ -30,12 +34,16 @@ const { title = "Portfólio", noIndex = false } = Astro.props;
 	</head>
   <body>
     <Header />
-    <div class="app-shell">
-      <div class="card-slot" aria-hidden="true"></div>
-      <Sidebar />
-      <main class="content">
-        <slot />
-      </main>
+    <div class={`app-shell${homeMinimal ? ' home-minimal' : ''}`}>
+      {!isContentPage && <Sidebar />}
+      {!homeMinimal && (
+        <main class="content">
+          {isContentPage && !hideContentBack && (
+            <a href="/" class="content-back" data-i18n-key="nav.backHome">Voltar ao início</a>
+          )}
+          <slot />
+        </main>
+      )}
     </div>
     <footer class="site-footer">
       <div class="footer-row">
@@ -51,18 +59,15 @@ const { title = "Portfólio", noIndex = false } = Astro.props;
       const translations = {
         'pt-BR': {
           'nav.home': 'Início',
-          'nav.blog': 'Blog',
+          'nav.backHome': 'Voltar ao início',
           'nav.contact': 'Contato',
           'nav.resources': 'Recursos',
           'title.cv': 'Currículo',
           'title.book': 'Agendar',
           'meta.base': 'Base',
           'meta.baseCity': 'João Pessoa, Brasil',
-          'home.recent': 'Postagens recentes',
-          'home.viewAll': 'Ver tudo',
           'footer.made': 'feito com ❤️ por Davi',
           'title.home': 'Início',
-          'title.blog': 'Blog',
           'title.contact': 'Contato',
           'title.resources': 'Recursos',
           'call.title': 'Agende uma conversa',
@@ -75,10 +80,6 @@ const { title = "Portfólio", noIndex = false } = Astro.props;
           'cv.share': 'Compartilhar este CV',
           'cv.copied': 'CV copiado!',
           'cv.gpa': 'GPA',
-          'blog.header.kicker': 'Blog',
-          'blog.header.title': 'Artigos e Postagens',
-          'blog.header.lead': 'Nada daqui tem DOI nem qualis, mas é digitado com o coração e (quase) sem IA.',
-          'blog.postedOn': 'Publicado em',
           'contact.title': 'Fale comigo',
           'contact.subtitle': 'Tem uma ideia, projeto ou dúvida? Envie uma mensagem.',
           'contact.nameLabel': 'Nome',
@@ -97,18 +98,15 @@ const { title = "Portfólio", noIndex = false } = Astro.props;
         },
         'en-US': {
           'nav.home': 'Home',
-          'nav.blog': 'Blog',
+          'nav.backHome': 'Back to home',
           'nav.contact': 'Contact',
           'nav.resources': 'Resources',
           'title.cv': 'CV',
           'title.book': 'Book a call',
           'meta.base': 'Location',
           'meta.baseCity': 'João Pessoa, Brazil',
-          'home.recent': 'Recent posts',
-          'home.viewAll': 'View all',
           'footer.made': 'made with ❤️ by Davi',
           'title.home': 'Home',
-          'title.blog': 'Blog',
           'title.contact': 'Contact',
           'title.resources': 'Resources',
           'call.title': 'Book a call',
@@ -121,10 +119,6 @@ const { title = "Portfólio", noIndex = false } = Astro.props;
           'cv.share': 'Share this CV',
           'cv.copied': 'CV copied!',
           'cv.gpa': 'GPA',
-          'blog.header.kicker': 'Blog',
-          'blog.header.title': 'Articles and Posts',
-          'blog.header.lead': 'None of this has a DOI or qualis, but it is typed with heart and (almost) no AI.',
-          'blog.postedOn': 'Published on',
           'contact.title': 'Contact me',
           'contact.subtitle': 'Have an idea, project, or question? Send a message.',
           'contact.nameLabel': 'Name',
@@ -164,18 +158,12 @@ const { title = "Portfólio", noIndex = false } = Astro.props;
         let pageName = '';
         if (path === '/' || path === '') {
           pageName = dict['title.home'] || 'Home';
-        } else if (path === '/blog' || path === '/blog/') {
-          pageName = dict['title.blog'] || 'Blog';
         } else if (path === '/resources' || path === '/resources/') {
           pageName = dict['title.resources'] || 'Resources';
         } else if (path.startsWith('/cv')) {
           pageName = dict['title.cv'] || 'CV';
         } else if (path === '/book-a-call' || path === '/book-a-call/') {
           pageName = dict['title.book'] || 'Book a call';
-        } else if (path.startsWith('/blog/')) {
-          const postTitleNode = document.querySelector('article.post-article h1');
-          const postTitle = postTitleNode && postTitleNode.textContent ? postTitleNode.textContent.trim() : '';
-          pageName = postTitle || (dict['title.blog'] || 'Blog');
         } else if (path.startsWith('/contact')) {
           pageName = dict['title.contact'] || 'Contact';
         } else {

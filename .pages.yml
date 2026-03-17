@@ -1,66 +1,24 @@
 media:
   - name: images
-    label: Imagens
+    label: Images
     input: src/assets
     path: src/assets
     output: /assets
     relative: true
 
 content:
-  - name: blog
-    label: Blog
+  - name: resources
+    label: Resources
     type: collection
-    path: src/content/blog
+    path: src/content/resources
     format: yaml-frontmatter
     subfolders: false
     filename: "{primary}.md"
 
     view:
-      primary: title
-      fields: [ title, pubDate, description ]
-      sort: [ pubDate, title ]
-
-    fields:
-      - name: title
-        label: Título
-        type: string
-        required: true
-
-      - name: description
-        label: Descrição Curta
-        type: text
-        required: true
-
-      - name: pubDate
-        label: Data de Publicação
-        type: date
-        required: true
-        save_format: "YYYY-MM-DD"
-
-      - name: heroImage
-        label: Imagem de Capa
-        type: image
-        required: false
-        path: src/assets
-        relative: true
-        value_template: "../../assets/{{filename}}"
-
-      - name: body
-        label: Conteúdo
-        type: text
-        required: true
-
-  - name: resources
-    label: Recursos
-    type: collection
-    path: src/content/resources
-    format: yaml-frontmatter
-    subfolders: false
-    filename: "{primary}.json"
-
-    view:
       primary: url
-      fields: [ url, overrideTitle, overrideDescription ]
+      fields: [url, overrideTitle, date]
+      sort: [date, url]
 
     fields:
       - name: url
@@ -69,19 +27,28 @@ content:
         required: true
 
       - name: overrideTitle
-        label: Título (opcional)
+        label: Title override
         type: string
         required: false
 
       - name: overrideDescription
-        label: Descrição (opcional)
+        label: Description override
         type: text
         required: false
 
       - name: overrideImage
-        label: Imagem (opcional)
-        type: image
+        label: Image URL override
+        type: string
         required: false
-        path: src/assets
-        relative: true
-        value_template: "../../assets/{{filename}}"
+
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+        required: false
+
+      - name: date
+        label: Date
+        type: date
+        required: false
+        save_format: "YYYY-MM-DD"
