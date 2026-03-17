@@ -20,7 +20,7 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <div class="cv-actions">
-      <a id="download-pdf-link" class="btn" href="/cv.pdf" download data-i18n-key="cv.download">Download as PDF</a>
+      <a id="download-pdf-link" class="btn" href="#" target="_blank" rel="noopener noreferrer" data-i18n-key="cv.download">Download as PDF</a>
       <button type="button" id="share-cv" class="btn outline" data-i18n-key="cv.share">Share this CV</button>
     </div>
   </section>
@@ -187,11 +187,20 @@ import Layout from '../layouts/Layout.astro';
     };
     const setCvSrc = () => {
       const frame = document.getElementById('cv-embed') as HTMLIFrameElement | null;
+      const downloadLink = document.getElementById('download-pdf-link') as HTMLAnchorElement | null;
       if (!frame) return;
       const getLang = (window as any).__i18n?.getLang?.() || (navigator.language || 'en-US');
       const lang = String(getLang).startsWith('pt') ? 'pt-BR' : 'en-US';
       const src = lang.startsWith('pt') ? frame.getAttribute('data-src-pt') : frame.getAttribute('data-src-en');
       if (src && frame.src !== src) frame.src = src;
+
+      if (downloadLink && src) {
+        const match = src.match(/\/document\/d\/([^/]+)/);
+        const docId = match?.[1] || '';
+        if (docId) {
+          downloadLink.href = `https://docs.google.com/document/d/${docId}/export?format=pdf`;
+        }
+      }
     };
     const initCvPage = () => {
       initCvActions();
@@ -203,5 +212,4 @@ import Layout from '../layouts/Layout.astro';
     window.addEventListener('app:language-changed', setCvSrc);
   </script>
 </Layout>
-
 

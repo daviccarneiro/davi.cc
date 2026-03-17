@@ -12,7 +12,11 @@ interface Props {
 }
 const { title = "Portfólio", noIndex = false, homeMinimal = false, hideContentBack = false } = Astro.props;
 const currentPath = Astro.url.pathname;
-const isContentPage = currentPath.startsWith('/resources') || currentPath.startsWith('/contact');
+const isContentPage =
+  currentPath.startsWith('/resources') ||
+  currentPath.startsWith('/contact') ||
+  currentPath.startsWith('/cv') ||
+  currentPath.startsWith('/book-a-call');
 ---
 
 <!doctype html>

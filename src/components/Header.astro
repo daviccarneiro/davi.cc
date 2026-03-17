@@ -3,7 +3,11 @@ import { Image } from 'astro:assets';
 import myProfilePic from '../assets/davi.jpeg';
 
 const currentPath = Astro.url.pathname;
-const isContentPage = currentPath.startsWith('/resources') || currentPath.startsWith('/contact');
+const isContentPage =
+  currentPath.startsWith('/resources') ||
+  currentPath.startsWith('/contact') ||
+  currentPath.startsWith('/cv') ||
+  currentPath.startsWith('/book-a-call');
 ---
 
 {isContentPage && (
