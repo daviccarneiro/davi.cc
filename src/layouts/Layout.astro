@@ -38,7 +38,7 @@ const isContentPage =
 	</head>
   <body>
     <Header />
-    <div class={`app-shell${homeMinimal ? ' home-minimal' : ''}`}>
+    <div class={`app-shell${homeMinimal ? ' home-minimal' : ''}${isContentPage ? ' content-only' : ''}`}>
       {!isContentPage && <Sidebar />}
       {!homeMinimal && (
         <main class="content">
