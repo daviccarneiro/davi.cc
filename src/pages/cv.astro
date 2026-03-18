@@ -1,7 +1,7 @@
 ---
-import { readFile } from 'node:fs/promises';
 import Layout from '../layouts/Layout.astro';
 import { cvDocuments } from '../lib/cv-documents';
+import { cvContent } from '../lib/cv-content';
 
 const slugify = (value) =>
   value
@@ -106,7 +106,7 @@ const markdownToDocument = (markdown, docId) => {
 
 const documents = await Promise.all(
   cvDocuments.map(async (doc) => {
-    const markdown = await readFile(new URL(doc.source, import.meta.url), 'utf8');
+    const markdown = cvContent[doc.id];
     const rendered = markdownToDocument(markdown, doc.id);
     return {
       id: doc.id,

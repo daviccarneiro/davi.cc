@@ -1,7 +1,8 @@
-import { readFile } from 'node:fs/promises';
 import type { APIRoute } from 'astro';
 import { mdToPdf } from 'md-to-pdf';
 import { cvDocumentMap } from '../../../lib/cv-documents';
+import type { CvDocumentId } from '../../../lib/cv-documents';
+import { cvContent } from '../../../lib/cv-content';
 
 const getPdfCss = (isOnePager: boolean) => `
   body {
@@ -70,15 +71,19 @@ const getPdfCss = (isOnePager: boolean) => `
 `;
 
 export const GET: APIRoute = async ({ params }) => {
-  const docId = params.doc || '';
+  const docId = (params.doc || '') as CvDocumentId;
   const doc = cvDocumentMap.get(docId);
 
   if (!doc) {
     return new Response('Document not found', { status: 404 });
   }
 
-  const markdown = await readFile(new URL(`../../../../public/${doc.id}.md`, import.meta.url), 'utf8');
+  const markdown = cvContent[doc.id];
   const isOnePager = doc.id.includes('1pager');
+
+  if (!markdown) {
+    return new Response('Document content not found', { status: 404 });
+  }
 
   try {
     const pdf = await mdToPdf(
@@ -89,7 +94,9 @@ export const GET: APIRoute = async ({ params }) => {
         document_title: doc.fileName.replace(/\.pdf$/i, ''),
         pdf_options: {
           format: 'A4',
-          margin: isOnePager ? '9mm 9mm 11mm 9mm' : '10mm 10mm 12mm 10mm',
+          margin: isOnePager
+            ? { top: '9mm', right: '9mm', bottom: '11mm', left: '9mm' }
+            : { top: '10mm', right: '10mm', bottom: '12mm', left: '10mm' },
           printBackground: true,
           preferCSSPageSize: true
         },
@@ -103,7 +110,7 @@ export const GET: APIRoute = async ({ params }) => {
       return new Response('Could not generate PDF', { status: 500 });
     }
 
-    return new Response(pdf.content, {
+    return new Response(new Uint8Array(pdf.content), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
