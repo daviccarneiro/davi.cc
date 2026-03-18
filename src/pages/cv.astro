@@ -113,13 +113,14 @@ const documents = await Promise.all(
       label: doc.label,
       tabLabel: doc.tabLabel,
       fileName: doc.fileName,
+      pdfPath: doc.pdfPath,
       html: rendered.html,
       toc: rendered.toc
     };
   })
 );
 
-const initialDocument = documents[0];
+const initialDocument = documents[0]!;
 ---
 
 <Layout title="davi.cc | CV">
@@ -172,7 +173,7 @@ const initialDocument = documents[0];
 
       <div class="cv-actions-wrap">
         <div class="cv-actions">
-          <button type="button" id="download-pdf-link" class="btn" data-file-name={initialDocument.fileName}>
+          <button type="button" id="download-pdf-link" class="btn" data-file-name={initialDocument.fileName} data-pdf-path={initialDocument.pdfPath}>
             <span class="btn-spinner" aria-hidden="true"></span>
             <span class="btn-label" data-i18n-key="cv.download">Download as PDF</span>
           </button>
@@ -645,6 +646,7 @@ const initialDocument = documents[0];
         documentElement.innerHTML = doc.html;
         documentElement.setAttribute('data-current-doc', doc.id);
         downloadButton.setAttribute('data-file-name', doc.fileName);
+        downloadButton.setAttribute('data-pdf-path', doc.pdfPath);
 
         tabElements.forEach((tab) => {
           const isActive = tab.getAttribute('data-doc-id') === doc.id;
@@ -687,7 +689,7 @@ const initialDocument = documents[0];
 
       downloadButton.onclick = async () => {
         const fileName = downloadButton.getAttribute('data-file-name') || 'cv.pdf';
-        const docId = documentElement.getAttribute('data-current-doc') || 'cv-us';
+        const pdfPath = downloadButton.getAttribute('data-pdf-path') || '';
         const t = window.__i18n?.t || ((key) => key);
         const label = downloadButton.querySelector('.btn-label');
         const originalLabel = label?.textContent || t('cv.download');
@@ -698,11 +700,12 @@ const initialDocument = documents[0];
         if (label) label.textContent = t('cv.downloading');
 
         try {
-          const response = await fetch(`/api/cv-pdf/${docId}`);
-          if (!response.ok) {
-            window.print();
+          if (!pdfPath) {
             return;
           }
+
+          const response = await fetch(pdfPath);
+          if (!response.ok) return;
 
           const blob = await response.blob();
           const url = URL.createObjectURL(blob);

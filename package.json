@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "sync:resource-meta": "node scripts/sync-resource-meta-cache.mjs",
-    "prebuild": "npm run sync:resource-meta",
+    "generate:cv-pdfs": "node scripts/generate-cv-pdfs.mjs",
+    "prebuild": "npm run sync:resource-meta && npm run generate:cv-pdfs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
