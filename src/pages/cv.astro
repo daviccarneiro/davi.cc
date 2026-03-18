@@ -1,109 +1,310 @@
 ---
+import { readFile } from 'node:fs/promises';
 import Layout from '../layouts/Layout.astro';
+import { cvDocuments } from '../lib/cv-documents';
+
+const slugify = (value) =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const escapeHtml = (value) =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+
+const formatInline = (value) => {
+  const escaped = escapeHtml(value.trim());
+  return escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+};
+
+const markdownToDocument = (markdown, docId) => {
+  const lines = markdown.split(/\r?\n/);
+  const html = [];
+  const toc = [];
+  let inList = false;
+  let inSection = false;
+  let sectionIndex = 0;
+  let subSectionIndex = 0;
+
+  const closeList = () => {
+    if (inList) {
+      html.push('</ul>');
+      inList = false;
+    }
+  };
+
+  const closeSection = () => {
+    closeList();
+    if (inSection) {
+      html.push('</section>');
+      inSection = false;
+    }
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+
+    if (!line) {
+      closeList();
+      continue;
+    }
+
+    if (line.startsWith('# ')) {
+      closeSection();
+      html.push(`<h1>${formatInline(line.slice(2))}</h1>`);
+      continue;
+    }
+
+    if (line.startsWith('## ')) {
+      closeSection();
+      sectionIndex += 1;
+      subSectionIndex = 0;
+      const title = line.slice(3).trim();
+      const id = `${docId}-${sectionIndex}-${slugify(title)}`;
+      toc.push({ id, label: title, level: 2 });
+      html.push(`<section class="cv-section" id="${id}"><h2>${formatInline(title)}</h2>`);
+      inSection = true;
+      continue;
+    }
+
+    if (line.startsWith('### ')) {
+      closeList();
+      subSectionIndex += 1;
+      const title = line.slice(4).trim();
+      const id = `${docId}-${sectionIndex}-${subSectionIndex}-${slugify(title)}`;
+      html.push(`<h3 id="${id}">${formatInline(title)}</h3>`);
+      continue;
+    }
+
+    if (line.startsWith('- ')) {
+      if (!inList) {
+        html.push('<ul>');
+        inList = true;
+      }
+      html.push(`<li>${formatInline(line.slice(2))}</li>`);
+      continue;
+    }
+
+    closeList();
+    html.push(`<p>${formatInline(line)}</p>`);
+  }
+
+  closeSection();
+
+  return {
+    html: html.join(''),
+    toc
+  };
+};
+
+const documents = await Promise.all(
+  cvDocuments.map(async (doc) => {
+    const markdown = await readFile(new URL(doc.source, import.meta.url), 'utf8');
+    const rendered = markdownToDocument(markdown, doc.id);
+    return {
+      id: doc.id,
+      label: doc.label,
+      tabLabel: doc.tabLabel,
+      fileName: doc.fileName,
+      html: rendered.html,
+      toc: rendered.toc
+    };
+  })
+);
+
+const initialDocument = documents[0];
 ---
 
 <Layout title="davi.cc | CV">
-  <section class="cv">
-    
+  <section class="cv-page" data-default-doc={initialDocument.id}>
+    <aside class="cv-sidebar-col">
+      <div class="cv-tabs-card">
+        <div class="cv-tabs" role="tablist" aria-label="Resume versions">
+          {documents.map((doc, index) => (
+            <button
+              type="button"
+              class={`cv-tab${index === 0 ? ' is-active' : ''}`}
+              role="tab"
+              aria-selected={index === 0 ? 'true' : 'false'}
+              aria-controls="cv-document"
+              aria-label={doc.label}
+              title={doc.label}
+              data-doc-id={doc.id}
+              data-file-name={doc.fileName}
+            >
+              {doc.tabLabel}
+            </button>
+          ))}
+        </div>
+      </div>
 
-    <section class="doc-embed">
-      <div class="doc-frame">
-        <iframe
-          id="cv-embed"
-          data-src-en="https://docs.google.com/document/d/1lkygIyyVerzO7K1bhU-2Q0SazfapZMll04-sidCQmJc/preview?rm=minimal"
-          data-src-pt="https://docs.google.com/document/d/1lkygIyyVerzO7K1bhU-2Q0SazfapZMll04-sidCQmJc/preview?rm=minimal"
-          allow="clipboard-write; encrypted-media"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
+      <aside class="cv-sidebar-card">
+        <div class="cv-sidebar-sticky">
+        <div class="cv-sidebar-head">
+          <p class="cv-sidebar-kicker" data-i18n-key="cv.tocKicker">Navigate</p>
+          <h2 data-i18n-key="cv.tocTitle">Contents</h2>
+        </div>
+
+        <nav class="cv-toc" aria-label="CV table of contents">
+          <ul id="cv-toc-list">
+            {initialDocument.toc.map((item) => (
+              <li class={`toc-item level-${item.level}`}>
+                <a href={`#${item.id}`}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        </div>
+      </aside>
+    </aside>
+
+    <section class="cv-main">
+      <article class="cv-document-shell">
+        <article id="cv-document" class="cv-document" data-current-doc={initialDocument.id} set:html={initialDocument.html}></article>
+      </article>
+
+      <div class="cv-actions-wrap">
+        <div class="cv-actions">
+          <button type="button" id="download-pdf-link" class="btn" data-file-name={initialDocument.fileName}>
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <span class="btn-label" data-i18n-key="cv.download">Download as PDF</span>
+          </button>
+          <button type="button" id="share-cv" class="btn outline" data-i18n-key="cv.share">Share this CV</button>
+        </div>
       </div>
     </section>
-
-    <div class="cv-actions">
-      <a id="download-pdf-link" class="btn" href="#" target="_blank" rel="noopener noreferrer" data-i18n-key="cv.download">Download as PDF</a>
-      <button type="button" id="share-cv" class="btn outline" data-i18n-key="cv.share">Share this CV</button>
-    </div>
   </section>
 
-  <style>
-    .cv {
-      display: grid;
-      gap: 1.25rem;
-    }
-    
+  <script type="application/json" id="cv-documents-data" set:html={JSON.stringify(documents)}></script>
 
-    .cv-section {
-      display: grid;
-      gap: 0.75rem;
+  <style>
+    :global(.app-shell.content-only) {
+      max-width: min(1600px, 100%);
     }
-    .cv-section h2 {
-      font-size: clamp(1.2rem, 0.9vw + 1rem, 1.4rem);
+
+    :global(.app-shell.content-only main.content) {
+      width: min(100%, 1520px);
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
     }
-    .item {
+
+    .cv-page {
       display: grid;
-      gap: 0.35rem;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .cv-sidebar-col {
+      display: grid;
+      gap: 1rem;
+      align-self: start;
+      position: sticky;
+      top: 1.5rem;
+    }
+
+    .cv-sidebar-card,
+    .cv-tabs-card,
+    .cv-document-shell {
       border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
       background: color-mix(in oklab, var(--color-surface) 96%, transparent);
       border-radius: var(--border-radius-sm);
-      padding: 0.9rem 1rem;
     }
-    .item h3 {
-      margin: 0;
-      font-size: clamp(1rem, 0.7vw + 0.95rem, 1.15rem);
+
+    .cv-tabs-card {
+      padding: 1rem;
     }
-    .item .time {
-      font-size: 0.9rem;
-      color: color-mix(in oklab, var(--color-text) 60%, transparent);
+
+    .cv-sidebar-card {
+      padding: 1rem;
+      max-height: calc(100vh - 9.5rem);
+      overflow: auto;
     }
-    .item .meta-line {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 0.75rem;
+
+    .cv-sidebar-sticky {
+      display: grid;
+      gap: 1rem;
     }
-    .item .gpa {
-      font-size: 0.9rem;
-      color: color-mix(in oklab, var(--color-text) 60%, transparent);
-      white-space: nowrap;
-    }
-    .item ul {
-      margin: 0.25rem 0 0 1rem;
-      padding: 0;
+
+    .cv-sidebar-head {
       display: grid;
       gap: 0.3rem;
     }
 
-    .columns {
+    .cv-sidebar-kicker {
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: color-mix(in oklab, var(--color-text) 62%, transparent);
+    }
+
+    .cv-sidebar-head h2 {
+      font-size: 1.1rem;
+    }
+
+    .cv-toc ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.18rem;
+    }
+
+    .toc-item a {
+      display: block;
+      text-decoration: none;
+      color: color-mix(in oklab, var(--color-text) 78%, transparent);
+      padding: 0.42rem 0.55rem;
+      border-radius: 10px;
+      line-height: 1.35;
+    }
+
+    .toc-item a:hover,
+    .toc-item a.is-active {
+      background: color-mix(in oklab, var(--color-bg) 78%, transparent);
+      color: var(--color-text);
+      opacity: 1;
+    }
+
+    .toc-item.level-3 a {
+      padding-left: 1rem;
+      font-size: 0.93rem;
+      color: color-mix(in oklab, var(--color-text) 68%, transparent);
+    }
+
+    .cv-main {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .cv-document-shell,
+    .cv-actions {
+      background: color-mix(in oklab, var(--color-surface) 96%, transparent);
+      border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+      border-radius: var(--border-radius-sm);
+      padding: 1rem;
+    }
+
+    .cv-document-shell {
+      padding: 1rem;
+    }
+
+    .cv-tabs {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.75rem 1rem;
-    }
-
-    .doc-embed {
-      display: grid;
-    }
-    .doc-frame {
-      border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
-      background: color-mix(in oklab, var(--color-surface) 96%, transparent);
-      border-radius: var(--border-radius-sm);
-      overflow: hidden;
-      height: min(80vh, 960px);
-    }
-    .doc-frame iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-      background: #fff;
-    }
-
-    .cv-actions {
-      display: flex;
       gap: 0.5rem;
-      justify-content: flex-end;
-      padding-top: 0.5rem;
-      border-top: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
     }
+
+    .cv-tab,
     .btn {
       appearance: none;
       border: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
@@ -117,99 +318,432 @@ import Layout from '../layouts/Layout.astro';
       font-weight: 600;
       transition: background-color 180ms ease, border-color 180ms ease, opacity 180ms ease;
     }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-width: 11.75rem;
+    }
+
+    .cv-tab {
+      width: 100%;
+      text-align: center;
+      padding-inline: 0.7rem;
+    }
+
+    .btn-spinner {
+      width: 0.9rem;
+      height: 0.9rem;
+      border: 2px solid color-mix(in oklab, var(--color-text) 18%, transparent);
+      border-top-color: currentColor;
+      border-radius: 999px;
+      display: none;
+      flex: 0 0 auto;
+      animation: cv-spin 700ms linear infinite;
+    }
+
+    .btn.is-loading .btn-spinner {
+      display: inline-block;
+    }
+
+    @keyframes cv-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .cv-tab:hover,
     .btn:hover {
       background: color-mix(in oklab, var(--color-bg) 82%, transparent);
       border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
       opacity: 0.8;
     }
+
+    .cv-tab.is-active {
+      background: color-mix(in oklab, var(--color-surface) 98%, transparent);
+      border-color: color-mix(in oklab, var(--color-text) 22%, transparent);
+      box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-text) 10%, transparent);
+    }
+
+    .cv-document {
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 1rem;
+      border-radius: calc(var(--border-radius-sm) - 2px);
+      background: #fff;
+      color: #111827;
+      box-shadow: 0 1px 0 rgba(17, 24, 39, 0.04);
+    }
+
+    .cv-document :global(h1),
+    .cv-document :global(h2),
+    .cv-document :global(h3),
+    .cv-document :global(p),
+    .cv-document :global(ul) {
+      margin: 0;
+    }
+
+    .cv-document :global(h1) {
+      font-size: clamp(2rem, 1.2vw + 1.8rem, 2.7rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .cv-document :global(h2) {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #4b5563;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid #e5e7eb;
+      scroll-margin-top: 1.5rem;
+    }
+
+    .cv-document :global(h3) {
+      font-size: 1.05rem;
+      line-height: 1.3;
+      scroll-margin-top: 1.5rem;
+    }
+
+    .cv-document :global(p) {
+      line-height: 1.65;
+      color: #374151;
+    }
+
+    .cv-document :global(ul) {
+      padding-left: 1.15rem;
+      display: grid;
+      gap: 0.45rem;
+      color: #374151;
+    }
+
+    .cv-document :global(li) {
+      line-height: 1.6;
+    }
+
+    .cv-document :global(.cv-section) {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .cv-document :global(.cv-section + .cv-section) {
+      padding-top: 0.25rem;
+    }
+
+    .cv-actions-wrap {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .cv-actions {
+      width: auto;
+      justify-self: end;
+      display: inline-flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+
     .btn.outline {
       background: color-mix(in oklab, var(--color-bg) 92%, transparent);
     }
+
     .btn.outline:hover {
       background: color-mix(in oklab, var(--color-bg) 82%, transparent);
       border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
       opacity: 0.8;
     }
 
-    /* Print styles: focus only on CV content */
+    .btn.outline.is-success {
+      color: #166534;
+      background: #dcfce7;
+      border-color: #86efac;
+      opacity: 1;
+    }
+
+    .btn.is-success {
+      color: #166534;
+      background: #dcfce7;
+      border-color: #86efac;
+      opacity: 1;
+    }
+
     :global(@media print) {
       :global(header.mobile-header),
       :global(aside.profile-card),
-      :global(footer.site-footer) {
+      :global(footer.site-footer),
+      .cv-sidebar-card,
+      .cv-tabs,
+      .cv-actions,
+      .content-back {
         display: none !important;
       }
+
+      :global(.app-shell.content-only),
       :global(main.content) {
+        max-width: 100% !important;
+        width: 100% !important;
         border: 0 !important;
         box-shadow: none !important;
         background: #fff !important;
         padding: 0 !important;
+        margin: 0 !important;
       }
-      .cv-actions {
-        display: none !important;
+
+      .cv-page,
+      .cv-main {
+        display: block !important;
       }
-      .cv {
-        gap: 0.9rem !important;
+
+      .cv-document-shell,
+      .cv-actions,
+      .cv-document {
+        border: 0 !important;
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
       }
-      .item {
+
+      .cv-document :global(.cv-section) {
         break-inside: avoid;
       }
     }
-    @media (max-width: 768px) {
-      .doc-frame {
-        height: min(60vh, 520px);
+
+    @media (max-width: 1120px) {
+      .cv-page {
+        grid-template-columns: 1fr;
       }
+
+      .cv-sidebar-col {
+        position: static;
+      }
+
+      .cv-sidebar-card {
+        max-height: none;
+        overflow: visible;
+      }
+
+      .cv-sidebar-sticky {
+        position: static;
+      }
+    }
+
+    @media (max-width: 768px) {
       .cv-actions {
         justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .cv-document-shell,
+      .cv-actions,
+      .cv-tabs-card,
+      .cv-sidebar-card {
+        padding: 1rem;
+      }
+
+      .cv-actions-wrap {
+        justify-content: center;
+      }
+
+      .cv-document {
+        padding: 1rem;
       }
     }
   </style>
 
   <script>
-    const initCvActions = () => {
-      const share = document.getElementById('share-cv');
-      if (share) {
-        share.onclick = async () => {
+    const initCvPage = () => {
+      const dataElement = document.getElementById('cv-documents-data');
+      const documentElement = document.getElementById('cv-document');
+      const tocListElement = document.getElementById('cv-toc-list');
+      const tabElements = Array.from(document.querySelectorAll('.cv-tab'));
+      const downloadButton = document.getElementById('download-pdf-link');
+      const shareButton = document.getElementById('share-cv');
+      const pageRoot = document.querySelector('.cv-page');
+
+      if (!dataElement || !documentElement || !tocListElement || !downloadButton || !pageRoot) return;
+
+      const documents = JSON.parse(dataElement.textContent || '[]');
+      const documentMap = new Map(documents.map((doc) => [doc.id, doc]));
+      let activeDocId = null;
+      let activeTocObserver = null;
+
+      const updateHash = (value) => {
+        const url = new URL(window.location.href);
+        url.hash = value;
+        history.replaceState({}, '', url);
+      };
+
+      const renderToc = (doc) => {
+        tocListElement.innerHTML = doc.toc
+          .map((item) => `<li class="toc-item level-${item.level}"><a href="#${item.id}" data-target-id="${item.id}">${item.label}</a></li>`)
+          .join('');
+
+        tocListElement.querySelectorAll('a[data-target-id]').forEach((link) => {
+          link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const targetId = link.getAttribute('data-target-id');
+            const target = targetId ? document.getElementById(targetId) : null;
+            if (!target) return;
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            updateHash(`${doc.id}:${targetId}`);
+          });
+        });
+      };
+
+      const initTocObserver = () => {
+        if (activeTocObserver) activeTocObserver.disconnect();
+
+        const links = Array.from(tocListElement.querySelectorAll('a[data-target-id]'));
+        const headingMap = new Map(
+          links
+            .map((link) => {
+              const id = link.getAttribute('data-target-id');
+              const node = id ? document.getElementById(id) : null;
+              return node ? [node, link] : null;
+            })
+            .filter(Boolean)
+        );
+
+        if (!headingMap.size) return;
+
+        const setActiveLink = (id) => {
+          links.forEach((link) => {
+            link.classList.toggle('is-active', link.getAttribute('data-target-id') === id);
+          });
+        };
+
+        activeTocObserver = new IntersectionObserver(
+          (entries) => {
+            const visible = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+            if (!visible) return;
+            const link = headingMap.get(visible.target);
+            const id = link?.getAttribute('data-target-id');
+            if (id) setActiveLink(id);
+          },
+          { rootMargin: '-10% 0px -70% 0px', threshold: [0, 1] }
+        );
+
+        headingMap.forEach((_, node) => activeTocObserver.observe(node));
+        const firstLinkId = links[0]?.getAttribute('data-target-id');
+        if (firstLinkId) setActiveLink(firstLinkId);
+      };
+
+      const setActiveDocument = (docId, syncHash = true) => {
+        const doc = documentMap.get(docId);
+        if (!doc) return;
+        activeDocId = doc.id;
+
+        documentElement.innerHTML = doc.html;
+        documentElement.setAttribute('data-current-doc', doc.id);
+        downloadButton.setAttribute('data-file-name', doc.fileName);
+
+        tabElements.forEach((tab) => {
+          const isActive = tab.getAttribute('data-doc-id') === doc.id;
+          tab.classList.toggle('is-active', isActive);
+          tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        renderToc(doc);
+        initTocObserver();
+
+        if (syncHash) updateHash(doc.id);
+      };
+
+      const preferredFromLanguage = () => {
+        const getLang = window.__i18n?.getLang?.() || navigator.language || 'en-US';
+        return String(getLang).startsWith('pt') ? 'cv-br' : 'cv-us';
+      };
+
+      const hashValue = window.location.hash.replace('#', '');
+      const [hashDocId, hashSectionId] = hashValue.split(':');
+      const initialDocId = documentMap.has(hashDocId)
+        ? hashDocId
+        : preferredFromLanguage() || pageRoot.getAttribute('data-default-doc');
+
+      setActiveDocument(initialDocId, Boolean(hashDocId));
+
+      if (hashSectionId) {
+        requestAnimationFrame(() => {
+          const target = document.getElementById(hashSectionId);
+          if (target) target.scrollIntoView({ block: 'start' });
+        });
+      }
+
+      tabElements.forEach((tab) => {
+        tab.onclick = () => {
+          const docId = tab.getAttribute('data-doc-id');
+          if (docId) setActiveDocument(docId);
+        };
+      });
+
+      downloadButton.onclick = async () => {
+        const fileName = downloadButton.getAttribute('data-file-name') || 'cv.pdf';
+        const docId = documentElement.getAttribute('data-current-doc') || 'cv-us';
+        const t = window.__i18n?.t || ((key) => key);
+        const label = downloadButton.querySelector('.btn-label');
+        const originalLabel = label?.textContent || t('cv.download');
+
+        downloadButton.disabled = true;
+        downloadButton.classList.add('is-loading');
+        downloadButton.classList.add('is-success');
+        if (label) label.textContent = t('cv.downloading');
+
+        try {
+          const response = await fetch(`/api/cv-pdf/${docId}`);
+          if (!response.ok) {
+            window.print();
+            return;
+          }
+
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+        } finally {
+          downloadButton.disabled = false;
+          downloadButton.classList.remove('is-loading');
+          downloadButton.classList.remove('is-success');
+          if (label) label.textContent = originalLabel;
+        }
+      };
+
+      if (shareButton) {
+        shareButton.onclick = async () => {
           try {
             await navigator.clipboard.writeText(location.href);
-            const t = (window as any).__i18n?.t || ((k: string) => k);
-            const original = share.textContent || t('cv.share');
-            share.textContent = t('cv.copied');
+            const t = window.__i18n?.t || ((k) => k);
+            const original = t('cv.share');
+            shareButton.classList.add('is-success');
+            shareButton.textContent = t('cv.copied');
             setTimeout(() => {
-              share.textContent = original;
+              shareButton.classList.remove('is-success');
+              shareButton.textContent = original;
             }, 1600);
           } catch {
-            // Fallback: prompt
             const ok = confirm('Copy this URL:\n' + location.href);
             if (ok) return;
           }
         };
       }
-    };
-    const setCvSrc = () => {
-      const frame = document.getElementById('cv-embed') as HTMLIFrameElement | null;
-      const downloadLink = document.getElementById('download-pdf-link') as HTMLAnchorElement | null;
-      if (!frame) return;
-      const getLang = (window as any).__i18n?.getLang?.() || (navigator.language || 'en-US');
-      const lang = String(getLang).startsWith('pt') ? 'pt-BR' : 'en-US';
-      const src = lang.startsWith('pt') ? frame.getAttribute('data-src-pt') : frame.getAttribute('data-src-en');
-      if (src && frame.src !== src) frame.src = src;
 
-      if (downloadLink && src) {
-        const match = src.match(/\/document\/d\/([^/]+)/);
-        const docId = match?.[1] || '';
-        if (docId) {
-          downloadLink.href = `https://docs.google.com/document/d/${docId}/export?format=pdf`;
-        }
-      }
     };
-    const initCvPage = () => {
-      initCvActions();
-      setCvSrc();
-    };
+
     initCvPage();
     document.addEventListener('astro:page-load', initCvPage);
     document.addEventListener('astro:after-swap', initCvPage);
-    window.addEventListener('app:language-changed', setCvSrc);
   </script>
 </Layout>
-

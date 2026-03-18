@@ -34,10 +34,10 @@ const currentPath = Astro.url.pathname;
     </div>
 
     <div class="social-nav" aria-label="Redes sociais">
-      <a href="https://github.com/daviccarneiro" target="_blank" rel="noopener noreferrer" aria-label="Github"><Icon name="mdi:github" /></a>
-      <a href="https://www.linkedin.com/in/davicc/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Icon name="mdi:linkedin" /></a>
-      <a href="https://www.researchgate.net/profile/Davi-Clementino-Carneiro?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><Icon name="mdi:school-outline" /></a>
-      <a href="/cv" aria-label="CV"><Icon name="mdi:file-document-outline" /></a>
+      <a href="https://github.com/daviccarneiro" target="_blank" rel="noopener noreferrer" aria-label="Github" data-tooltip="GitHub"><Icon name="mdi:github" /></a>
+      <a href="https://www.linkedin.com/in/davicc/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-tooltip="LinkedIn"><Icon name="mdi:linkedin" /></a>
+      <a href="https://www.researchgate.net/profile/Davi-Clementino-Carneiro?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate" data-tooltip="ResearchGate"><Icon name="mdi:school-outline" /></a>
+      <a href="/cv" aria-label="CV" data-tooltip="CV"><Icon name="mdi:file-document-outline" /></a>
     </div>
 
   </div>
@@ -158,6 +158,8 @@ const currentPath = Astro.url.pathname;
   }
 
   .social-nav a {
+    position: relative;
+    overflow: visible;
     width: 42px;
     height: 42px;
     display: inline-flex;
@@ -168,11 +170,73 @@ const currentPath = Astro.url.pathname;
     color: var(--color-text);
     background: color-mix(in oklab, var(--color-bg) 92%, transparent);
     transition: background-color 180ms ease, color 180ms ease;
+    z-index: 0;
+  }
+
+  .social-nav a::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 4px);
+    transform: translateX(-50%) translateY(4px);
+    width: 10px;
+    height: 10px;
+    background: color-mix(in oklab, var(--color-text) 96%, white 4%);
+    border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent);
+    border-top: 0;
+    border-left: 0;
+    opacity: 0;
+    z-index: 20;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease;
+    rotate: 45deg;
+  }
+
+  .social-nav a::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%) translateY(4px);
+    min-width: max-content;
+    max-width: 180px;
+    padding: 0.5rem 0.65rem;
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--color-text) 96%, white 4%);
+    border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent);
+    color: white;
+    font-size: 0.78rem;
+    line-height: 1.25;
+    text-align: center;
+    white-space: normal;
+    opacity: 0;
+    z-index: 21;
+    pointer-events: none;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.14);
+    transition: opacity 180ms ease, transform 180ms ease;
   }
 
   .social-nav a:hover {
     background: color-mix(in oklab, var(--color-bg) 82%, transparent);
     color: inherit;
+  }
+
+  .social-nav a:hover::before,
+  .social-nav a:hover::after,
+  .social-nav a:focus-visible::before,
+  .social-nav a:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .social-nav a:hover,
+  .social-nav a:focus-visible {
+    z-index: 5;
+  }
+
+  .social-nav a:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-text) 18%, transparent);
+    outline-offset: 2px;
   }
 
   .social-nav :global(svg) {
@@ -213,6 +277,10 @@ const currentPath = Astro.url.pathname;
 
     .social-nav {
       flex-wrap: wrap;
+    }
+
+    .social-nav a::after {
+      max-width: 140px;
     }
   }
 </style>
