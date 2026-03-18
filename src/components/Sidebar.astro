@@ -19,12 +19,10 @@ const currentPath = Astro.url.pathname;
       />
     </div>
 
-    <h1>Davi Carneiro, MSc., PhDc.</h1>
-
-    <nav class="main-nav" aria-label="Navegação principal">
-      <a href="/resources" class={currentPath.startsWith('/resources') ? 'is-active' : ''} data-i18n-key="nav.resources">Recursos</a>
-      <a href="/contact" class={currentPath === '/contact' ? 'is-active' : ''} data-i18n-key="nav.contact">Contato</a>
-    </nav>
+    <div class="profile-copy">
+      <h1>Davi Carneiro</h1>
+      <p class="profile-description">MSc. PhDc. CSM. Problem Solver.</p>
+    </div>
 
     <div class="meta-grid">
       <div>
@@ -33,11 +31,13 @@ const currentPath = Astro.url.pathname;
       </div>
     </div>
 
-    <div class="social-nav" aria-label="Redes sociais">
+    <div class="social-nav" aria-label="Links principais">
+      <a href="/resources" class={currentPath.startsWith('/resources') ? 'is-active' : ''} aria-label="Resources" data-tooltip="Resources"><Icon name="mdi:book-open-variant-outline" /></a>
+      <a href="/cv" aria-label="Resume" data-tooltip-pt="Curriculo" data-tooltip-en="Resume"><Icon name="mdi:file-document-outline" /></a>
+      <a href="/contact" class={currentPath === '/contact' ? 'is-active' : ''} aria-label="Contact" data-tooltip="Contact"><Icon name="mdi:email-outline" /></a>
       <a href="https://github.com/daviccarneiro" target="_blank" rel="noopener noreferrer" aria-label="Github" data-tooltip="GitHub"><Icon name="mdi:github" /></a>
-      <a href="https://www.linkedin.com/in/davicc/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-tooltip="LinkedIn"><Icon name="mdi:linkedin" /></a>
       <a href="https://www.researchgate.net/profile/Davi-Clementino-Carneiro?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate" data-tooltip="ResearchGate"><Icon name="mdi:school-outline" /></a>
-      <a href="/cv" aria-label="CV" data-tooltip="CV"><Icon name="mdi:file-document-outline" /></a>
+      <a href="https://www.linkedin.com/in/davicc/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-tooltip="LinkedIn"><Icon name="mdi:linkedin" /></a>
     </div>
 
   </div>
@@ -53,6 +53,11 @@ const currentPath = Astro.url.pathname;
     pointer-events: auto;
   }
 
+  .social-nav a[data-tooltip]::after,
+  .social-nav a[data-tooltip-pt]::after {
+    content: attr(data-tooltip);
+  }
+
   .card-surface {
     position: relative;
     pointer-events: auto;
@@ -64,7 +69,7 @@ const currentPath = Astro.url.pathname;
     border-radius: 24px;
     background: var(--color-surface);
     border: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
-    box-shadow: none;
+    box-shadow: var(--shadow-surface);
     backdrop-filter: none;
     will-change: opacity, transform;
     animation: fade-in-soft 420ms ease-out both;
@@ -98,34 +103,17 @@ const currentPath = Astro.url.pathname;
     line-height: 1.2;
   }
 
-  .main-nav {
+  .profile-copy {
     display: grid;
-    width: 100%;
-    grid-template-columns: repeat(2, minmax(120px, 1fr));
-    gap: 0.75rem;
+    gap: 0.45rem;
+    justify-items: center;
   }
 
-  .main-nav a {
+  .profile-description {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--color-text-soft);
     text-align: center;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 0.65rem 0.75rem;
-    border-radius: 12px;
-    background: color-mix(in oklab, var(--color-bg) 92%, transparent);
-    border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
-    color: var(--color-text);
-    transition: background-color 180ms ease, border-color 180ms ease;
-    white-space: nowrap;
-  }
-
-  .main-nav a.is-active {
-    background: color-mix(in oklab, var(--color-bg) 85%, transparent);
-    border-color: color-mix(in oklab, var(--color-border) 85%, transparent);
-  }
-
-  .main-nav a:hover {
-    background: color-mix(in oklab, var(--color-bg) 82%, transparent);
-    border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
   }
 
   .meta-grid {
@@ -134,6 +122,7 @@ const currentPath = Astro.url.pathname;
     gap: 0.75rem;
     grid-template-columns: 1fr;
     text-align: left;
+    margin-bottom: 0.5rem;
   }
 
   .meta-label {
@@ -152,9 +141,11 @@ const currentPath = Astro.url.pathname;
 
   .social-nav {
     width: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 42px);
     justify-content: center;
     gap: 0.85rem;
+    margin-top: 0.5rem;
   }
 
   .social-nav a {
@@ -221,6 +212,11 @@ const currentPath = Astro.url.pathname;
     color: inherit;
   }
 
+  .social-nav a.is-active {
+    background: color-mix(in oklab, var(--color-bg) 85%, transparent);
+    border-color: color-mix(in oklab, var(--color-border) 85%, transparent);
+  }
+
   .social-nav a:hover::before,
   .social-nav a:hover::after,
   .social-nav a:focus-visible::before,
@@ -267,16 +263,8 @@ const currentPath = Astro.url.pathname;
       border-radius: 20px;
     }
 
-    .main-nav {
-      flex-direction: column;
-    }
-
-    .main-nav a {
-      width: 100%;
-    }
-
     .social-nav {
-      flex-wrap: wrap;
+      grid-template-columns: repeat(3, 42px);
     }
 
     .social-nav a::after {
@@ -284,3 +272,20 @@ const currentPath = Astro.url.pathname;
     }
   }
 </style>
+
+<script>
+  const syncResumeTooltip = () => {
+    const lang = localStorage.getItem('lang') || document.documentElement.lang || navigator.language || 'en-US';
+    const resumeLink = document.querySelector('.social-nav a[href="/cv"]');
+    if (!resumeLink) return;
+    const tooltip = String(lang).startsWith('pt')
+      ? resumeLink.getAttribute('data-tooltip-pt')
+      : resumeLink.getAttribute('data-tooltip-en');
+    if (tooltip) resumeLink.setAttribute('data-tooltip', tooltip);
+  };
+
+  syncResumeTooltip();
+  document.addEventListener('astro:page-load', syncResumeTooltip);
+  document.addEventListener('astro:after-swap', syncResumeTooltip);
+  window.addEventListener('app:language-changed', syncResumeTooltip);
+</script>

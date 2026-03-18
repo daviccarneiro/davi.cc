@@ -123,7 +123,7 @@ const documents = await Promise.all(
 const initialDocument = documents[0]!;
 ---
 
-<Layout title="davi.cc | CV">
+<Layout title="davi.cc | Resume">
   <section class="cv-page" data-default-doc={initialDocument.id}>
     <aside class="cv-sidebar-col">
       <div class="cv-tabs-card">
@@ -153,7 +153,7 @@ const initialDocument = documents[0]!;
           <h2 data-i18n-key="cv.tocTitle">Contents</h2>
         </div>
 
-        <nav class="cv-toc" aria-label="CV table of contents">
+        <nav class="cv-toc" aria-label="Resume table of contents">
           <ul id="cv-toc-list">
             {initialDocument.toc.map((item) => (
               <li class={`toc-item level-${item.level}`}>
@@ -177,7 +177,7 @@ const initialDocument = documents[0]!;
             <span class="btn-spinner" aria-hidden="true"></span>
             <span class="btn-label" data-i18n-key="cv.download">Download as PDF</span>
           </button>
-          <button type="button" id="share-cv" class="btn outline" data-i18n-key="cv.share">Share this CV</button>
+          <button type="button" id="share-cv" class="btn outline" data-i18n-key="cv.share">Share this Resume</button>
         </div>
       </div>
     </section>
@@ -219,6 +219,7 @@ const initialDocument = documents[0]!;
       border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
       background: color-mix(in oklab, var(--color-surface) 96%, transparent);
       border-radius: var(--border-radius-sm);
+      box-shadow: var(--shadow-surface);
     }
 
     .cv-tabs-card {
@@ -292,6 +293,7 @@ const initialDocument = documents[0]!;
       background: color-mix(in oklab, var(--color-surface) 96%, transparent);
       border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
       border-radius: var(--border-radius-sm);
+      box-shadow: var(--shadow-surface);
       padding: 1rem;
     }
 
@@ -662,7 +664,7 @@ const initialDocument = documents[0]!;
 
       const preferredFromLanguage = () => {
         const getLang = window.__i18n?.getLang?.() || navigator.language || 'en-US';
-        return String(getLang).startsWith('pt') ? 'cv-br' : 'cv-us';
+        return String(getLang).startsWith('pt') ? 'cv-br' : 'cv-en';
       };
 
       const hashValue = window.location.hash.replace('#', '');
@@ -688,7 +690,7 @@ const initialDocument = documents[0]!;
       });
 
       downloadButton.onclick = async () => {
-        const fileName = downloadButton.getAttribute('data-file-name') || 'cv.pdf';
+        const fileName = downloadButton.getAttribute('data-file-name') || 'resume.pdf';
         const pdfPath = downloadButton.getAttribute('data-pdf-path') || '';
         const t = window.__i18n?.t || ((key) => key);
         const label = downloadButton.querySelector('.btn-label');

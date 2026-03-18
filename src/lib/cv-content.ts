@@ -1,7 +1,7 @@
 import type { CvDocumentId } from './cv-documents';
 
 export const cvContent: Record<CvDocumentId, string> = {
-  'cv-us': `# Davi Carneiro
+  'cv-en': `# Davi Carneiro
 
 Joao Pessoa, Brazil  
 Email: davicarneirodcc@gmail.com  
@@ -129,7 +129,7 @@ GPA: 9.58 / 10.00
 - Jira
 - Trello
 `,
-  'cv-us-1pager': `# Davi Carneiro
+  'cv-en-1pager': `# Davi Carneiro
 
 Joao Pessoa, Brazil  
 Email: davicarneirodcc@gmail.com  

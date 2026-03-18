@@ -8,24 +8,24 @@ const outputDir = resolve(root, 'public/cv-pdfs');
 
 const docs = [
   {
-    id: 'cv-us',
-    source: resolve(root, 'public/cv-us.md'),
-    dest: resolve(outputDir, 'DaviCarneiro_CV_us.pdf')
+    id: 'cv-en',
+    source: resolve(root, 'public/cv-en.md'),
+    dest: resolve(outputDir, 'DaviCarneiro_Resume_en.pdf')
   },
   {
-    id: 'cv-us-1pager',
-    source: resolve(root, 'public/cv-us-1pager.md'),
-    dest: resolve(outputDir, 'DaviCarneiro_CV_us_1p.pdf')
+    id: 'cv-en-1pager',
+    source: resolve(root, 'public/cv-en-1pager.md'),
+    dest: resolve(outputDir, 'DaviCarneiro_Resume_en_1p.pdf')
   },
   {
     id: 'cv-br',
     source: resolve(root, 'public/cv-br.md'),
-    dest: resolve(outputDir, 'DaviCarneiro_CV_br.pdf')
+    dest: resolve(outputDir, 'DaviCarneiro_Curriculo_br.pdf')
   },
   {
     id: 'cv-br-1pager',
     source: resolve(root, 'public/cv-br-1pager.md'),
-    dest: resolve(outputDir, 'DaviCarneiro_CV_br_1p.pdf')
+    dest: resolve(outputDir, 'DaviCarneiro_Curriculo_br_1p.pdf')
   }
 ];
 

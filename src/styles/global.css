@@ -22,7 +22,7 @@
 
   /* Efeitos */
   --shadow-card: none;
-  --shadow-surface: none;
+  --shadow-surface: 0 18px 45px rgba(38, 56, 120, 0.12);
   --border-radius-lg: 28px;
   --border-radius-md: 18px;
   --border-radius-sm: 12px;
