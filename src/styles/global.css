@@ -254,6 +254,10 @@ main.content:hover {
     gap: 1.5rem;
   }
 
+  .content-back {
+    display: none;
+  }
+
   .site-footer {
     font-size: 0.9rem;
   }
