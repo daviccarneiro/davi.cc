@@ -34,6 +34,7 @@ const currentPath = Astro.url.pathname;
     <div class="social-nav" aria-label="Links principais">
       <a href="/resources" class={currentPath.startsWith('/resources') ? 'is-active' : ''} aria-label="Resources" data-tooltip="Resources"><Icon name="mdi:book-open-variant-outline" /></a>
       <a href="/cv" aria-label="Resume" data-tooltip-pt="Curriculo" data-tooltip-en="Resume"><Icon name="mdi:file-document-outline" /></a>
+      <a href="/waitlist" class={currentPath === '/waitlist' ? 'is-active' : ''} aria-label="Waitlist" data-tooltip-pt="Lista de Espera" data-tooltip-en="Waitlist"><Icon name="mdi:rocket-launch-outline" /></a>
       <a href="/contact" class={currentPath === '/contact' ? 'is-active' : ''} aria-label="Contact" data-tooltip="Contact"><Icon name="mdi:email-outline" /></a>
       <a href="https://github.com/daviccarneiro" target="_blank" rel="noopener noreferrer" aria-label="Github" data-tooltip="GitHub"><Icon name="mdi:github" /></a>
       <a href="https://www.researchgate.net/profile/Davi-Clementino-Carneiro?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate" data-tooltip="ResearchGate"><Icon name="mdi:school-outline" /></a>
@@ -274,18 +275,19 @@ const currentPath = Astro.url.pathname;
 </style>
 
 <script>
-  const syncResumeTooltip = () => {
+  const syncTooltips = () => {
     const lang = localStorage.getItem('lang') || document.documentElement.lang || navigator.language || 'en-US';
-    const resumeLink = document.querySelector('.social-nav a[href="/cv"]');
-    if (!resumeLink) return;
-    const tooltip = String(lang).startsWith('pt')
-      ? resumeLink.getAttribute('data-tooltip-pt')
-      : resumeLink.getAttribute('data-tooltip-en');
-    if (tooltip) resumeLink.setAttribute('data-tooltip', tooltip);
+    document.querySelectorAll('.social-nav a[data-tooltip-pt]').forEach((link) => {
+      if (!(link instanceof HTMLElement)) return;
+      const tooltip = String(lang).startsWith('pt')
+        ? link.getAttribute('data-tooltip-pt')
+        : link.getAttribute('data-tooltip-en');
+      if (tooltip) link.setAttribute('data-tooltip', tooltip);
+    });
   };
 
-  syncResumeTooltip();
-  document.addEventListener('astro:page-load', syncResumeTooltip);
-  document.addEventListener('astro:after-swap', syncResumeTooltip);
-  window.addEventListener('app:language-changed', syncResumeTooltip);
+  syncTooltips();
+  document.addEventListener('astro:page-load', syncTooltips);
+  document.addEventListener('astro:after-swap', syncTooltips);
+  window.addEventListener('app:language-changed', syncTooltips);
 </script>
