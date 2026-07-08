@@ -2,11 +2,18 @@ import type { APIRoute } from 'astro';
 
 export const prerender = false;
 
-const WEBHOOK_URL = 'http://10.0.0.167:5678/webhook/waitlist';
+const WEBHOOK_URL = import.meta.env.N8N_WEBHOOK_URL || '';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
     const { email, name } = await request.json().catch(() => ({}));
+
+    if (!WEBHOOK_URL) {
+      return new Response(
+        JSON.stringify({ error: 'Serviço temporariamente indisponível.' }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
     if (!email || !name) {
       return new Response(
