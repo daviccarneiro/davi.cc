@@ -2,35 +2,35 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="davi.cc | Waitlist">
-  <section class="waitlist">
-    <p class="subtitle" data-i18n-key="waitlist.subtitle">Seja o primeiro a saber do lançamento.</p>
+<Layout title="davi.cc | 1Minuto">
+  <section class="oneminuto">
+    <p class="subtitle" data-i18n-key="1minuto.subtitle">Seja o primeiro a saber do lançamento.</p>
 
-    <div class="waitlist-card">
-      <div class="waitlist-header">
-        <h2 data-i18n-key="waitlist.title">Lista de Espera</h2>
-        <p data-i18n-key="waitlist.description">Deixe seu email e nome para entrar na lista de espera do meu novo app. Você será notificado assim que lançar.</p>
+    <div class="oneminuto-card">
+      <div class="oneminuto-header">
+        <h2 data-i18n-key="1minuto.title">Lista de Espera</h2>
+        <p data-i18n-key="1minuto.description">Deixe seu email e nome para entrar na lista de espera do meu novo app. Você será notificado assim que lançar.</p>
       </div>
 
-      <form class="waitlist-form" id="waitlist-form" novalidate>
+      <form class="oneminuto-form" id="oneminuto-form" novalidate>
         <div class="field">
-          <label for="name" data-i18n-key="waitlist.nameLabel">Nome</label>
-          <input type="text" id="name" name="name" required placeholder="Seu nome" data-i18n-placeholder="waitlist.namePh" />
+          <label for="name" data-i18n-key="1minuto.nameLabel">Nome</label>
+          <input type="text" id="name" name="name" required placeholder="Seu nome" data-i18n-placeholder="1minuto.namePh" />
         </div>
 
         <div class="field">
-          <label for="email" data-i18n-key="waitlist.emailLabel">Email</label>
-          <input type="email" id="email" name="email" required placeholder="voce@exemplo.com" data-i18n-placeholder="waitlist.emailPh" />
+          <label for="email" data-i18n-key="1minuto.emailLabel">Email</label>
+          <input type="email" id="email" name="email" required placeholder="voce@exemplo.com" data-i18n-placeholder="1minuto.emailPh" />
         </div>
 
-        <button type="submit" class="btn-primary" id="submit-btn" data-i18n-key="waitlist.submit">Entrar na Lista</button>
+        <button type="submit" class="btn-primary" id="submit-btn" data-i18n-key="1minuto.submit">Entrar na Lista</button>
         <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>
 
   <style>
-    .waitlist {
+    .oneminuto {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
@@ -43,7 +43,7 @@ import Layout from '../layouts/Layout.astro';
       text-align: left;
     }
 
-    .waitlist-card {
+    .oneminuto-card {
       border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
       background: color-mix(in oklab, var(--color-surface) 90%, transparent);
       border-radius: var(--border-radius-md);
@@ -52,23 +52,23 @@ import Layout from '../layouts/Layout.astro';
       backdrop-filter: blur(10px);
     }
 
-    .waitlist-header {
+    .oneminuto-header {
       margin-bottom: 1.5rem;
     }
 
-    .waitlist-header h2 {
+    .oneminuto-header h2 {
       margin: 0 0 0.5rem;
       font-size: 1.35rem;
     }
 
-    .waitlist-header p {
+    .oneminuto-header p {
       margin: 0;
       color: var(--color-text-soft);
       font-size: 0.95rem;
       line-height: 1.6;
     }
 
-    .waitlist-form {
+    .oneminuto-form {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
@@ -135,8 +135,8 @@ import Layout from '../layouts/Layout.astro';
   </style>
 
   <script>
-    function initWaitlistForm() {
-      const formNode = document.getElementById('waitlist-form');
+    function init1MinutoForm() {
+      const formNode = document.getElementById('oneminuto-form');
       const statusNode = document.getElementById('form-status');
       const submitBtnNode = document.getElementById('submit-btn');
 
@@ -166,7 +166,7 @@ import Layout from '../layouts/Layout.astro';
 
         formNode.addEventListener('submit', async (e) => {
           e.preventDefault();
-          setStatus(t('waitlist.status.sending'));
+          setStatus(t('1minuto.status.sending'));
           submitBtnNode.disabled = true;
 
           try {
@@ -175,7 +175,7 @@ import Layout from '../layouts/Layout.astro';
               email: getFieldValue('email')
             };
 
-            const response = await fetch('/api/waitlist', {
+            const response = await fetch('/api/1minuto', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',
@@ -185,10 +185,10 @@ import Layout from '../layouts/Layout.astro';
             });
 
             if (response.ok) {
-              setStatus(t('waitlist.status.success'), 'success');
+              setStatus(t('1minuto.status.success'), 'success');
               formNode.reset();
             } else {
-              let errorMsg = t('waitlist.status.error');
+              let errorMsg = t('1minuto.status.error');
               try {
                 const data = await response.json();
                 if (data && (data.error || data.message)) {
@@ -198,7 +198,7 @@ import Layout from '../layouts/Layout.astro';
               setStatus(errorMsg, 'error');
             }
           } catch {
-            setStatus(t('waitlist.status.network'), 'error');
+            setStatus(t('1minuto.status.network'), 'error');
           } finally {
             submitBtnNode.disabled = false;
           }
@@ -206,8 +206,8 @@ import Layout from '../layouts/Layout.astro';
       }
     }
 
-    initWaitlistForm();
-    document.addEventListener('astro:page-load', initWaitlistForm);
-    document.addEventListener('astro:after-swap', initWaitlistForm);
+    init1MinutoForm();
+    document.addEventListener('astro:page-load', init1MinutoForm);
+    document.addEventListener('astro:after-swap', init1MinutoForm);
   </script>
 </Layout>

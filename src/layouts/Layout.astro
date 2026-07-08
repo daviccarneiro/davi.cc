@@ -17,7 +17,7 @@ const isContentPage =
   currentPath.startsWith('/contact') ||
   currentPath.startsWith('/cv') ||
   currentPath.startsWith('/book-a-call') ||
-  currentPath.startsWith('/waitlist');
+  currentPath.startsWith('/1minuto');
 ---
 
 <!doctype html>
@@ -83,7 +83,7 @@ const isContentPage =
           'meta.baseCity': 'João Pessoa, Brasil',
           'footer.made': 'feito com ❤️ por Davi',
           'title.home': 'Início',
-          'title.waitlist': 'Lista de Espera',
+          'title.1minuto': 'Lista de Espera',
           'title.contact': 'Contato',
           'title.resources': 'Recursos',
           'call.title': 'Agende uma conversa',
@@ -114,18 +114,18 @@ const isContentPage =
           'contact.status.success': 'Obrigado! Sua mensagem foi enviada com sucesso.',
           'contact.status.error': 'Não foi possível enviar. Tente novamente mais tarde.',
           'contact.status.network': 'Erro de rede. Verifique sua conexão e tente novamente.',
-          'waitlist.title': 'Lista de Espera',
-          'waitlist.subtitle': 'Seja o primeiro a saber do lançamento.',
-          'waitlist.description': 'Deixe seu email e nome para entrar na lista de espera do meu novo app. Você será notificado assim que lançar.',
-          'waitlist.nameLabel': 'Nome',
-          'waitlist.namePh': 'Seu nome',
-          'waitlist.emailLabel': 'Email',
-          'waitlist.emailPh': 'voce@exemplo.com',
-          'waitlist.submit': 'Entrar na Lista',
-          'waitlist.status.sending': 'Cadastrando...',
-          'waitlist.status.success': 'Obrigado! Você está na lista de espera.',
-          'waitlist.status.error': 'Não foi possível cadastrar. Tente novamente mais tarde.',
-          'waitlist.status.network': 'Erro de rede. Verifique sua conexão e tente novamente.'
+          '1minuto.title': 'Lista de Espera',
+          '1minuto.subtitle': 'Seja o primeiro a saber do lançamento.',
+          '1minuto.description': 'Deixe seu email e nome para entrar na lista de espera do meu novo app. Você será notificado assim que lançar.',
+          '1minuto.nameLabel': 'Nome',
+          '1minuto.namePh': 'Seu nome',
+          '1minuto.emailLabel': 'Email',
+          '1minuto.emailPh': 'voce@exemplo.com',
+          '1minuto.submit': 'Entrar na Lista',
+          '1minuto.status.sending': 'Cadastrando...',
+          '1minuto.status.success': 'Obrigado! Você está na lista de espera.',
+          '1minuto.status.error': 'Não foi possível cadastrar. Tente novamente mais tarde.',
+          '1minuto.status.network': 'Erro de rede. Verifique sua conexão e tente novamente.'
         },
         'en-US': {
           'nav.home': 'Home',
@@ -138,7 +138,7 @@ const isContentPage =
           'meta.baseCity': 'João Pessoa, Brazil',
           'footer.made': 'made with ❤️ by Davi',
           'title.home': 'Home',
-          'title.waitlist': 'Waitlist',
+          'title.1minuto': 'Waitlist',
           'title.contact': 'Contact',
           'title.resources': 'Resources',
           'call.title': 'Book a call',
@@ -169,18 +169,18 @@ const isContentPage =
           'contact.status.success': 'Thank you! Your message has been sent.',
           'contact.status.error': 'Could not send. Please try again later.',
           'contact.status.network': 'Network error. Check your connection and try again.',
-          'waitlist.title': 'Waitlist',
-          'waitlist.subtitle': 'Be the first to know about the launch.',
-          'waitlist.description': 'Drop your email and name to join the waitlist for my new app. You will be notified when it launches.',
-          'waitlist.nameLabel': 'Name',
-          'waitlist.namePh': 'Your name',
-          'waitlist.emailLabel': 'Email',
-          'waitlist.emailPh': 'you@example.com',
-          'waitlist.submit': 'Join the Waitlist',
-          'waitlist.status.sending': 'Signing up...',
-          'waitlist.status.success': 'Thank you! You are on the waitlist.',
-          'waitlist.status.error': 'Could not sign up. Please try again later.',
-          'waitlist.status.network': 'Network error. Check your connection and try again.'
+          '1minuto.title': 'Waitlist',
+          '1minuto.subtitle': 'Be the first to know about the launch.',
+          '1minuto.description': 'Drop your email and name to join. You will be notified when it launches.',
+          '1minuto.nameLabel': 'Name',
+          '1minuto.namePh': 'Your name',
+          '1minuto.emailLabel': 'Email',
+          '1minuto.emailPh': 'you@example.com',
+          '1minuto.submit': 'Join the Waitlist',
+          '1minuto.status.sending': 'Signing up...',
+          '1minuto.status.success': 'Thank you! You are on the 1minuto.',
+          '1minuto.status.error': 'Could not sign up. Please try again later.',
+          '1minuto.status.network': 'Network error. Check your connection and try again.'
         }
       };
 
@@ -211,8 +211,8 @@ const isContentPage =
           pageName = dict['title.cv'] || 'Resume';
         } else if (path === '/book-a-call' || path === '/book-a-call/') {
           pageName = dict['title.book'] || 'Book a call';
-        } else if (path === '/waitlist' || path === '/waitlist/') {
-          pageName = dict['title.waitlist'] || 'Waitlist';
+        } else if (path === '/1minuto' || path === '/1minuto/') {
+          pageName = dict['title.1minuto'] || '1Minuto';
         } else if (path.startsWith('/contact')) {
           pageName = dict['title.contact'] || 'Contact';
         } else {

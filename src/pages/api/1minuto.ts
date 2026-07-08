@@ -35,9 +35,9 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    throw new Error('Falha ao salvar na waitlist');
+    throw new Error('Falha ao salvar no 1minuto');
   } catch (err) {
-    console.error('[waitlist] Error:', err);
+    console.error('[1minuto] Error:', err);
     return new Response(
       JSON.stringify({ error: 'Não foi possível completar o cadastro. Tente novamente.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
