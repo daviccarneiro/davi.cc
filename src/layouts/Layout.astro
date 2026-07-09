@@ -17,7 +17,8 @@ const isContentPage =
   currentPath.startsWith('/contact') ||
   currentPath.startsWith('/cv') ||
   currentPath.startsWith('/book-a-call') ||
-  currentPath.startsWith('/1minuto');
+  currentPath.startsWith('/1minuto') ||
+  currentPath.startsWith('/404');
 ---
 
 <!doctype html>
@@ -86,6 +87,15 @@ const isContentPage =
           'title.1minuto': 'Lista de Espera',
           'title.contact': 'Contato',
           'title.resources': 'Recursos',
+          'title.404': 'Página não encontrada',
+          '404.title': 'Página não encontrada',
+          '404.description': 'O caminho que você tentou acessar não existe ou foi movido.',
+          '404.home': 'Voltar ao início',
+          '404.contact': 'Falar comigo',
+          'resources.pagination': 'Paginação',
+          'resources.newer': 'Mais recentes',
+          'resources.older': 'Mais antigos',
+          'resources.pageStatus': 'Página {current} de {total}',
           'call.title': 'Agende uma conversa',
           'call.description': 'Escolha um horário disponível no calendário para marcar uma conversa comigo.',
           'cv.education': 'Educação',
@@ -93,7 +103,7 @@ const isContentPage =
           'cv.projects': 'Projetos',
            'cv.skills': 'Habilidades',
            'cv.tocKicker': 'Navegar',
-           'cv.tocTitle': 'Conteudo',
+           'cv.tocTitle': 'Conteúdo',
            'cv.download': 'Baixar em PDF',
            'cv.downloading': 'Baixando',
            'cv.share': 'Compartilhar este currículo',
@@ -107,7 +117,7 @@ const isContentPage =
           'contact.messageLabel': 'Mensagem',
           'contact.submit': 'Enviar',
           'contact.namePh': 'Seu nome',
-          'contact.emailPh': 'voce@exemplo.com',
+          'contact.emailPh': 'você@exemplo.com',
           'contact.subjectPh': 'Sobre o que é?',
           'contact.messagePh': 'Escreva sua mensagem...',
           'contact.status.sending': 'Enviando...',
@@ -120,7 +130,7 @@ const isContentPage =
           '1minuto.nameLabel': 'Nome',
           '1minuto.namePh': 'Seu nome',
           '1minuto.emailLabel': 'Email',
-          '1minuto.emailPh': 'voce@exemplo.com',
+          '1minuto.emailPh': 'você@exemplo.com',
           '1minuto.submit': 'Entrar na Lista',
           '1minuto.status.sending': 'Cadastrando...',
           '1minuto.status.success': 'Obrigado! Você está na lista de espera.',
@@ -141,6 +151,15 @@ const isContentPage =
           'title.1minuto': 'Waitlist',
           'title.contact': 'Contact',
           'title.resources': 'Resources',
+          'title.404': 'Page not found',
+          '404.title': 'Page not found',
+          '404.description': 'The path you tried to open does not exist or was moved.',
+          '404.home': 'Back to home',
+          '404.contact': 'Contact me',
+          'resources.pagination': 'Pagination',
+          'resources.newer': 'Newer',
+          'resources.older': 'Older',
+          'resources.pageStatus': 'Page {current} of {total}',
           'call.title': 'Book a call',
           'call.description': 'Pick an available time slot on the calendar to schedule a call.',
           'cv.education': 'Education',
@@ -215,6 +234,8 @@ const isContentPage =
           pageName = dict['title.1minuto'] || '1Minuto';
         } else if (path.startsWith('/contact')) {
           pageName = dict['title.contact'] || 'Contact';
+        } else if (path === '/404' || path === '/404/') {
+          pageName = dict['title.404'] || 'Page not found';
         } else {
           pageName = document.title.replace(/^.*\|\s*/, '') || 'Page';
         }
@@ -228,6 +249,18 @@ const isContentPage =
         document.querySelectorAll('[data-i18n-key]').forEach((el) => {
           const key = el.getAttribute('data-i18n-key');
           if (key && dict[key]) el.textContent = dict[key];
+        });
+        document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => {
+          const key = el.getAttribute('data-i18n-aria-label');
+          if (key && dict[key]) el.setAttribute('aria-label', dict[key]);
+        });
+        document.querySelectorAll('[data-i18n-template]').forEach((el) => {
+          const key = el.getAttribute('data-i18n-template');
+          const template = key ? dict[key] : '';
+          if (!template) return;
+          el.textContent = template
+            .replace('{current}', el.getAttribute('data-current-page') || '')
+            .replace('{total}', el.getAttribute('data-total-pages') || '');
         });
         document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
           const key = el.getAttribute('data-i18n-placeholder');

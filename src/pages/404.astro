@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="davi.cc | 404" noIndex={true} hideContentBack={true}>
+  <section class="not-found" aria-labelledby="not-found-title">
+    <p class="eyebrow">404</p>
+    <h1 id="not-found-title" data-i18n-key="404.title">Página não encontrada</h1>
+    <p data-i18n-key="404.description">
+      O caminho que você tentou acessar não existe ou foi movido.
+    </p>
+    <div class="not-found-actions">
+      <a href="/" class="primary-action" data-i18n-key="404.home">Voltar ao início</a>
+      <a href="/contact" class="secondary-action" data-i18n-key="404.contact">Falar comigo</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .not-found {
+    min-height: min(420px, 58vh);
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-family: var(--font-family-mono);
+    font-size: clamp(3.5rem, 11vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: -0.08em;
+    color: color-mix(in oklab, var(--color-primary) 58%, var(--color-text));
+  }
+
+  .not-found h1 {
+    max-width: 680px;
+  }
+
+  .not-found p:not(.eyebrow) {
+    max-width: 560px;
+    font-size: 1.05rem;
+  }
+
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .primary-action,
+  .secondary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.72rem 1rem;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid color-mix(in oklab, var(--color-border) 80%, transparent);
+    transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+
+  .primary-action {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+
+  .secondary-action {
+    background: color-mix(in oklab, var(--color-bg) 94%, transparent);
+    color: var(--color-text);
+  }
+
+  .primary-action:hover,
+  .secondary-action:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+
+  .secondary-action:hover {
+    background: color-mix(in oklab, var(--color-bg) 86%, transparent);
+    border-color: color-mix(in oklab, var(--color-border) 90%, transparent);
+  }
+
+  @media (max-width: 520px) {
+    .not-found-actions {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
+</style>

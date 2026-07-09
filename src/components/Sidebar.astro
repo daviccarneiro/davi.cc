@@ -32,8 +32,8 @@ const currentPath = Astro.url.pathname;
     </div>
 
     <div class="social-nav" aria-label="Links principais">
-      <a href="/resources" class={currentPath.startsWith('/resources') ? 'is-active' : ''} aria-label="Resources" data-tooltip="Resources"><Icon name="mdi:book-open-variant-outline" /></a>
-      <a href="/cv" aria-label="Resume" data-tooltip-pt="Curriculo" data-tooltip-en="Resume"><Icon name="mdi:file-document-outline" /></a>
+      <a href="/resources" class={currentPath.startsWith('/resources') ? 'is-active' : ''} aria-label="Resources" data-tooltip-pt="Recursos" data-tooltip-en="Resources"><Icon name="mdi:book-open-variant-outline" /></a>
+      <a href="/cv" aria-label="Resume" data-tooltip-pt="Currículo" data-tooltip-en="Resume"><Icon name="mdi:file-document-outline" /></a>
       <a href="/contact" class={currentPath === '/contact' ? 'is-active' : ''} aria-label="Contact" data-tooltip="Contact"><Icon name="mdi:email-outline" /></a>
       <a href="https://github.com/daviccarneiro" target="_blank" rel="noopener noreferrer" aria-label="Github" data-tooltip="GitHub"><Icon name="mdi:github" /></a>
       <a href="https://www.researchgate.net/profile/Davi-Clementino-Carneiro?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate" data-tooltip="ResearchGate"><Icon name="mdi:school-outline" /></a>

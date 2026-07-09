@@ -69,18 +69,18 @@ const cards = pageResources.map((entry) => {
         </li>
       ))}
     </ul>
-    <nav class="pagination" aria-label="Pagination">
+    <nav class="pagination" aria-label="Pagination" data-i18n-aria-label="resources.pagination">
       <a
         class={`page-btn${currentPage === 1 ? ' is-disabled' : ''}`}
         href={`/resources${currentPage === 2 ? '' : `?page=${currentPage - 1}`}`}
         aria-disabled={currentPage === 1}
-      >Newer</a>
-      <span class="page-status">Page {currentPage} of {totalPages}</span>
+      ><span data-i18n-key="resources.newer">Newer</span></a>
+      <span class="page-status" data-i18n-template="resources.pageStatus" data-current-page={currentPage} data-total-pages={totalPages}>Page {currentPage} of {totalPages}</span>
       <a
         class={`page-btn${currentPage === totalPages ? ' is-disabled' : ''}`}
         href={`/resources?page=${currentPage + 1}`}
         aria-disabled={currentPage === totalPages}
-      >Older</a>
+      ><span data-i18n-key="resources.older">Older</span></a>
     </nav>
   </section>
 
