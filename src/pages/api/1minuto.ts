@@ -2,10 +2,12 @@ import type { APIRoute } from 'astro';
 
 export const prerender = false;
 
-const WEBHOOK_URL = import.meta.env.N8N_WEBHOOK_URL || '';
-
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    // On Cloudflare, runtime secrets live in locals.runtime.env, not import.meta.env
+    const env = (locals as any).runtime?.env ?? import.meta.env;
+    const WEBHOOK_URL = env.N8N_WEBHOOK_URL || '';
+
     const { email, name } = await request.json().catch(() => ({}));
 
     if (!WEBHOOK_URL) {

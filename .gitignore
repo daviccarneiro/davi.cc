@@ -2,6 +2,10 @@
 dist/
 .vercel/
 
+# cloudflare
+.wrangler/
+.dev.vars
+
 # generated types
 .astro/
 

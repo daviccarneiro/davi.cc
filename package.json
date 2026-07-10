@@ -19,6 +19,6 @@
     "resend": "^4.0.0"
   },
   "devDependencies": {
-    "@astrojs/vercel": "^8.0.0"
+    "@astrojs/cloudflare": "^12.6.13"
   }
 }

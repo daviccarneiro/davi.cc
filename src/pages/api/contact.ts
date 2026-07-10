@@ -1,12 +1,12 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
-
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    // On Cloudflare, runtime secrets live in locals.runtime.env, not import.meta.env
+    const env = (locals as any).runtime?.env ?? import.meta.env;
     if (request.method !== 'POST') {
       return new Response(JSON.stringify({ error: 'Method not allowed' }), {
         status: 405,
@@ -36,9 +36,9 @@ export const POST: APIRoute = async ({ request }) => {
       </div>
     `;
 
-    const apiKey = import.meta.env.RESEND_API_KEY;
-    const fromAddress = import.meta.env.RESEND_FROM || 'davi.cc <onboarding@resend.dev>';
-    const toAddress = import.meta.env.RESEND_TO || 'davicarneirodcc@gmail.com';
+    const apiKey = env.RESEND_API_KEY;
+    const fromAddress = env.RESEND_FROM || 'davi.cc <onboarding@resend.dev>';
+    const toAddress = env.RESEND_TO || 'davicarneirodcc@gmail.com';
 
     if (!apiKey) {
       console.error('[contact] Missing RESEND_API_KEY');
@@ -47,10 +47,11 @@ export const POST: APIRoute = async ({ request }) => {
         headers: { 'Content-Type': 'application/json' }
       });
     }
-    if (!import.meta.env.RESEND_FROM) {
+    if (!env.RESEND_FROM) {
       console.warn('[contact] RESEND_FROM not set. Falling back to onboarding@resend.dev (may be blocked for unverified domains).');
     }
 
+    const resend = new Resend(apiKey);
     const { data, error } = await resend.emails.send({
       from: fromAddress,
       to: [toAddress],
