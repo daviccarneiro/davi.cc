@@ -8,6 +8,7 @@
     "generate:cv-pdfs": "node scripts/generate-cv-pdfs.mjs",
     "prebuild": "npm run sync:resource-meta",
     "build": "astro build",
+    "postbuild": "node scripts/write-assetsignore.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
