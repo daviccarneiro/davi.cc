@@ -1,7 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "davi-cc",
-  "compatibility_date": "2025-07-01",
+  "name": "davicc",
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2026-07-10",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "./dist"
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  }
 }
