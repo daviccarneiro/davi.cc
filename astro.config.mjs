@@ -7,6 +7,7 @@ import icon from 'astro-icon';
 // https://astro.build/config
 export default defineConfig({
   integrations: [icon()],
-  adapter: cloudflare(),
+  // Cloudflare has no sharp at runtime; optimize local images at build time instead
+  adapter: cloudflare({ imageService: 'compile' }),
   output: 'server'
 });
