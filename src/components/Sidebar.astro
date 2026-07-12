@@ -1,7 +1,6 @@
 ---
-import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
-import myProfilePic from "../assets/davi.jpeg"; 
+import myProfilePic from "../assets/davi.jpeg";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -9,13 +8,14 @@ const currentPath = Astro.url.pathname;
 <aside class="profile-card" aria-label="Perfil de Davi Carneiro">
   <div class="card-surface">
     <div class="profile-pic-frame">
-      <Image
-        src={myProfilePic}
+      <img
+        src={myProfilePic.src}
         alt="Retrato de Davi Carneiro"
         class="profile-pic"
         width={140}
         height={140}
-        format="webp"
+        loading="eager"
+        decoding="async"
       />
     </div>
 

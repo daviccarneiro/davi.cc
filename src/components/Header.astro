@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import myProfilePic from '../assets/davi.jpeg';
 
 const currentPath = Astro.url.pathname;
@@ -15,12 +14,12 @@ const isContentPage =
   <header class="mobile-header">
     <div class="left-group">
       <a href="/" class="brand" aria-label="Página inicial">
-        <Image
-          src={myProfilePic}
+        <img
+          src={myProfilePic.src}
           alt="Davi Carneiro"
           width={32}
           height={32}
-          format="webp"
+          decoding="async"
           class="avatar"
         />
       </a>
