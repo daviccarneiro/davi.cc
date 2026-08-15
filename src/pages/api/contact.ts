@@ -26,7 +26,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const title = subject && String(subject).trim() ? String(subject).trim() : 'Nova mensagem via davi.cc';
 
     const html = `
-      <div style="font-family:Inter,Arial,sans-serif;line-height:1.6;color:#111">
+      <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.6;color:#111">
         <h2 style="margin:0 0 12px">Nova mensagem</h2>
         <p style="margin:0 0 8px"><strong>Nome:</strong> ${escapeHtml(name)}</p>
         <p style="margin:0 0 8px"><strong>Email:</strong> ${escapeHtml(email)}</p>
@@ -95,5 +95,4 @@ function escapeHtml(value: string) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
-
 
