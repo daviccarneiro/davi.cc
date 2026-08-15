@@ -1,12 +1,13 @@
 {
-  "name": "",
+  "name": "davi.cc",
+  "private": true,
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "sync:resource-meta": "node scripts/sync-resource-meta-cache.mjs",
     "generate:cv-pdfs": "node scripts/generate-cv-pdfs.mjs",
-    "prebuild": "npm run sync:resource-meta",
+    "check": "astro check",
     "build": "astro build",
     "postbuild": "node scripts/write-assetsignore.mjs",
     "preview": "astro preview",
@@ -16,10 +17,13 @@
     "@iconify-json/mdi": "^1.2.3",
     "astro": "^5.15.1",
     "astro-icon": "^1.1.5",
-    "md-to-pdf": "^5.2.5",
     "resend": "^4.0.0"
   },
   "devDependencies": {
-    "@astrojs/cloudflare": "^12.6.13"
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/cloudflare": "^12.6.13",
+    "md-to-pdf": "^5.2.5",
+    "typescript": "^5.0.0",
+    "wrangler": "4.59.2"
   }
 }

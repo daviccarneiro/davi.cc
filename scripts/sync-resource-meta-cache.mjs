@@ -111,12 +111,17 @@ const run = async () => {
     if (!REFRESH_ALL && hasEnoughData) continue;
 
     const meta = await fetchMetaFromUrl(url);
-    cache[url] = {
+    const nextEntry = {
       ...(cache[url] || {}),
       title: meta.title || existing.title || '',
-      image: meta.image || existing.image || '',
-      updatedAt: new Date().toISOString()
+      image: meta.image || existing.image || ''
     };
+
+    if (meta.title || meta.image) {
+      nextEntry.updatedAt = new Date().toISOString();
+    }
+
+    cache[url] = nextEntry;
     fetchedCount += 1;
   }
 
@@ -127,10 +132,21 @@ const run = async () => {
   const sortedEntries = Object.entries(cache).sort(([a], [b]) => a.localeCompare(b));
   const sortedCache = Object.fromEntries(sortedEntries);
 
-  await mkdir(path.dirname(CACHE_FILE), { recursive: true });
-  await writeFile(CACHE_FILE, `${JSON.stringify(sortedCache, null, 2)}\n`, 'utf-8');
+  const serializedCache = `${JSON.stringify(sortedCache, null, 2)}\n`;
+  let existingSerializedCache = '';
 
-  console.log(`Resource metadata cache synced (${fetchedCount} fetched, ${uniqueUrls.length} total URLs).`);
+  try {
+    existingSerializedCache = await readFile(CACHE_FILE, 'utf-8');
+  } catch {}
+
+  if (existingSerializedCache !== serializedCache) {
+    await mkdir(path.dirname(CACHE_FILE), { recursive: true });
+    await writeFile(CACHE_FILE, serializedCache, 'utf-8');
+  }
+
+  console.log(
+    `Resource metadata cache synced (${fetchedCount} fetched, ${uniqueUrls.length} total URLs${existingSerializedCache === serializedCache ? ', unchanged' : ''}).`
+  );
 };
 
 run().catch((error) => {

@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { cvDocuments } from '../lib/cv-documents';
+import { cvDocuments, type CvDocumentId } from '../lib/cv-documents';
 import { cvContent } from '../lib/cv-content';
 
-const slugify = (value) =>
+const slugify = (value: string): string =>
   value
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -11,7 +11,7 @@ const slugify = (value) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-const escapeHtml = (value) =>
+const escapeHtml = (value: string): string =>
   value
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -19,12 +19,23 @@ const escapeHtml = (value) =>
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
 
-const formatInline = (value) => {
+const formatInline = (value: string): string => {
   const escaped = escapeHtml(value.trim());
   return escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 };
 
-const markdownToDocument = (markdown, docId) => {
+type CvTocItem = {
+  id: string;
+  label: string;
+  level: number;
+};
+
+type RenderedCvDocument = {
+  html: string;
+  toc: CvTocItem[];
+};
+
+const markdownToDocument = (markdown: string, docId: CvDocumentId): RenderedCvDocument => {
   const lines = markdown.split(/\r?\n/);
   const html = [];
   const toc = [];
@@ -183,7 +194,7 @@ const initialDocument = documents[0]!;
     </section>
   </section>
 
-  <script type="application/json" id="cv-documents-data" set:html={JSON.stringify(documents)}></script>
+  <script is:inline type="application/json" id="cv-documents-data" set:html={JSON.stringify(documents)}></script>
 
   <style>
     :global(.app-shell.content-only) {
@@ -561,6 +572,7 @@ const initialDocument = documents[0]!;
   </style>
 
   <script>
+    // @ts-nocheck
     const initCvPage = () => {
       const dataElement = document.getElementById('cv-documents-data');
       const documentElement = document.getElementById('cv-document');
