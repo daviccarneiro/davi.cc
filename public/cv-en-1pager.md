@@ -12,7 +12,7 @@ Product, project, and client success professional with experience in account man
 ## Professional Experience
 
 ### Client Success Manager
-**Curio Digital** | Jul 2023 - Present
+**Curio Digital** | Jul 2023 - Sep 2026
 
 - Manage 20+ client accounts across onboarding, retention, and relationship growth.
 

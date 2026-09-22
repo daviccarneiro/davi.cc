@@ -13,7 +13,7 @@ Profissional de produto, projetos e sucesso do cliente com experiencia em gestao
 
 ### Gerente de Sucesso do Cliente
 **Curio Digital**  
-Jul 2023 - Atual
+Jul 2023 - Set 2026
 
 - Gerencio uma carteira com mais de 20 contas de clientes, liderando onboarding, adocao, retencao e relacionamento continuo.
 - Monitoro a saude das contas, a satisfacao dos clientes e indicadores de crescimento para identificar riscos e oportunidades de expansao.

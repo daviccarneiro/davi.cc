@@ -13,7 +13,7 @@ Product, project, and client success professional with experience in account man
 
 ### Client Success Manager
 **Curio Digital**  
-Jul 2023 - Present
+Jul 2023 - Sep 2026
 
 - Manage a portfolio of 20+ client accounts, leading onboarding, adoption, retention, and ongoing relationship management.
 - Monitor account health, client satisfaction, and growth metrics to identify risks and expansion opportunities.
