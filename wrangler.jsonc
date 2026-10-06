@@ -10,6 +10,10 @@
     {
       "pattern": "davi.cc",
       "custom_domain": true
+    },
+    {
+      "pattern": "www.davi.cc",
+      "custom_domain": true
     }
   ],
   "assets": {
