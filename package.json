@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "astro dev",
     "sync:resource-meta": "node scripts/sync-resource-meta-cache.mjs",
-    "generate:cv-pdfs": "node scripts/generate-cv-pdfs.mjs",
     "check": "astro check",
     "build": "astro build",
     "postbuild": "node scripts/write-assetsignore.mjs",
@@ -22,7 +21,6 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/cloudflare": "^12.6.13",
-    "md-to-pdf": "^5.2.5",
     "typescript": "^5.0.0",
     "wrangler": "4.59.2"
   }

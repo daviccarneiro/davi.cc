@@ -109,6 +109,16 @@ a:hover {
   margin-inline: auto;
 }
 
+.app-shell.content-only.is-wide {
+  max-width: min(1720px, 100%);
+}
+
+.app-shell.content-only.is-wide main.content {
+  width: 100%;
+  max-width: min(1680px, 100%);
+  padding: clamp(1.25rem, 1.6vw + 0.6rem, 2.25rem);
+}
+
 main.content {
   position: relative;
   flex: 0 0 auto;

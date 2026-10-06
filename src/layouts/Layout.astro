@@ -9,8 +9,9 @@ interface Props {
 	noIndex?: boolean;
 	homeMinimal?: boolean;
 	hideContentBack?: boolean;
+	wide?: boolean;
 }
-const { title = "Portfólio", noIndex = false, homeMinimal = false, hideContentBack = false } = Astro.props;
+const { title = "Portfólio", noIndex = false, homeMinimal = false, hideContentBack = false, wide = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 const isContentPage =
   currentPath.startsWith('/resources') ||
@@ -46,7 +47,7 @@ const isContentPage =
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <Header />
-    <div class={`app-shell${homeMinimal ? ' home-minimal' : ''}${isContentPage ? ' content-only' : ''}`}>
+    <div class={`app-shell${homeMinimal ? ' home-minimal' : ''}${isContentPage ? ' content-only' : ''}${wide ? ' is-wide' : ''}`}>
       {!isContentPage && <Sidebar />}
       {!homeMinimal && (
         <main class="content">
@@ -101,10 +102,12 @@ const isContentPage =
            'cv.skills': 'Habilidades',
            'cv.tocKicker': 'Navegar',
            'cv.tocTitle': 'Conteúdo',
-           'cv.download': 'Baixar em PDF',
-           'cv.downloading': 'Baixando',
-           'cv.share': 'Compartilhar este currículo',
-           'cv.copied': 'URL copiada',
+            'cv.download': 'Baixar em PDF',
+            'cv.downloading': 'Baixando',
+            'cv.share': 'Compartilhar este currículo',
+            'cv.copied': 'URL copiada',
+            'cv.openResume': 'Abrir currículo',
+            'cv.versions': 'Versões do currículo',
           'cv.gpa': 'GPA',
           'contact.title': 'Fale comigo',
           'contact.subtitle': 'Tem uma ideia, projeto ou dúvida? Envie uma mensagem.',
@@ -165,10 +168,12 @@ const isContentPage =
            'cv.skills': 'Skills',
            'cv.tocKicker': 'Navigate',
            'cv.tocTitle': 'Contents',
-           'cv.download': 'Download as PDF',
-           'cv.downloading': 'Downloading',
-           'cv.share': 'Share this Resume',
-           'cv.copied': 'URL copied',
+            'cv.download': 'Download as PDF',
+            'cv.downloading': 'Downloading',
+            'cv.share': 'Share this Resume',
+            'cv.copied': 'URL copied',
+            'cv.openResume': 'Open resume',
+            'cv.versions': 'Resume versions',
           'cv.gpa': 'GPA',
           'contact.title': 'Contact me',
           'contact.subtitle': 'Have an idea, project, or question? Send a message.',

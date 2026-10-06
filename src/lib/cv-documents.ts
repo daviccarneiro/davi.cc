@@ -1,34 +1,39 @@
-export const cvDocuments = [
-  {
-    id: 'cv-en',
-    label: 'English',
-    tabLabel: '🇬🇧',
-    fileName: 'DaviCarneiro_Resume_en.pdf',
-    pdfPath: '/cv-pdfs/DaviCarneiro_Resume_en.pdf'
-  },
-  {
-    id: 'cv-en-1pager',
-    label: 'English 1 Page',
-    tabLabel: '🇬🇧 1p',
-    fileName: 'DaviCarneiro_Resume_en_1p.pdf',
-    pdfPath: '/cv-pdfs/DaviCarneiro_Resume_en_1p.pdf'
-  },
-  {
-    id: 'cv-br',
-    label: 'Brazil',
-    tabLabel: '🇧🇷',
-    fileName: 'DaviCarneiro_Curriculo_br.pdf',
-    pdfPath: '/cv-pdfs/DaviCarneiro_Curriculo_br.pdf'
-  },
-  {
-    id: 'cv-br-1pager',
-    label: 'Brazil 1 Page',
-    tabLabel: '🇧🇷 1p',
-    fileName: 'DaviCarneiro_Curriculo_br_1p.pdf',
-    pdfPath: '/cv-pdfs/DaviCarneiro_Curriculo_br_1p.pdf'
-  }
-] as const;
+export type CvDocumentId = 'ptbr' | 'enus';
 
-export type CvDocumentId = (typeof cvDocuments)[number]['id'];
+export type CvDocument = {
+  id: CvDocumentId;
+  label: string;
+  shortLabel: string;
+  fileName: string;
+  embedUrl: string;
+  mobileEmbedUrl: string;
+  documentUrl: string;
+  pdfUrl: string;
+};
 
-export const cvDocumentMap = new Map(cvDocuments.map((doc) => [doc.id, doc]));
+const documentUrl = 'https://docs.google.com/document/d/1hJUIlXSjLCWKfdmPdF7AG7LJZXM5ic7n2hTKPYSMJJY';
+
+const createDocument = (
+  id: CvDocumentId,
+  label: string,
+  shortLabel: string,
+  fileName: string,
+  tabId: string
+): CvDocument => ({
+  id,
+  label,
+  shortLabel,
+  fileName,
+  embedUrl: `${documentUrl}/preview?tab=${tabId}`,
+  mobileEmbedUrl: `${documentUrl}/mobilebasic?tab=${tabId}`,
+  documentUrl: `${documentUrl}/edit?tab=${tabId}`,
+  pdfUrl: `${documentUrl}/export?format=pdf&tab=${tabId}`
+});
+
+export const cvDocuments: CvDocument[] = [
+  createDocument('ptbr', 'Português (BR)', 'PT/BR', 'DaviCarneiro_Curriculo_ptbr.pdf', 't.a83gc2up999m'),
+  createDocument('enus', 'English (US)', 'EN/US', 'DaviCarneiro_Resume_en.pdf', 't.0')
+];
+
+export const getCvDocument = (id: string | null | undefined): CvDocument | undefined =>
+  cvDocuments.find((doc) => doc.id === id);
