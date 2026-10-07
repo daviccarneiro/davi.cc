@@ -19,5 +19,18 @@
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist"
+  },
+  "env": {
+    "staging": {
+      "name": "davicc-staging",
+      "workers_dev": false,
+      "preview_urls": false,
+      "routes": [
+        {
+          "pattern": "staging.davi.cc",
+          "custom_domain": true
+        }
+      ]
+    }
   }
 }
