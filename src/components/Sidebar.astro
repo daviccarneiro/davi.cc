@@ -74,6 +74,7 @@ const currentPath = Astro.url.pathname;
     will-change: opacity, transform;
     animation: fade-in-soft 420ms ease-out both;
     transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+    container-type: inline-size;
   }
 
   .profile-pic-frame {
@@ -94,9 +95,10 @@ const currentPath = Astro.url.pathname;
   }
 
   h1 {
-    font-size: clamp(1.25rem, 0.8vw + 1.1rem, 1.6rem);
+    font-size: clamp(1.05rem, 0.5vw + 1rem, 1.2rem);
+    font-size: min(1.25rem, 6.6cqw);
     text-align: center;
-    white-space: normal;
+    white-space: nowrap;
     max-width: 100%;
     overflow: visible;
     text-overflow: clip;
