@@ -1,0 +1,170 @@
+---
+const NEWSLETTER_URL =
+  'https://introducing.news/?utm_source=davi.cc&utm_medium=referral&utm_campaign=homepage_newsletter_card';
+---
+
+<a
+  class="newsletter-card"
+  href={NEWSLETTER_URL}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Assine a newsletter introducing.news (abre em nova aba)"
+  data-i18n-aria-label="newsletter.aria"
+>
+  <span class="newsletter-copy">
+    <span class="newsletter-prompt" data-i18n-key="newsletter.prompt">Assine minha newsletter</span>
+    <span class="newsletter-brand" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M12 2C13.2 8.4 15.6 10.8 22 12C15.6 13.2 13.2 15.6 12 22C10.8 15.6 8.4 13.2 2 12C8.4 10.8 10.8 8.4 12 2Z"
+          stroke="#F6821F"
+          stroke-width="2"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span class="brand-mark">introducing<span class="brand-tld">.news</span></span>
+    </span>
+  </span>
+  <span class="newsletter-arrow" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </span>
+</a>
+
+<style>
+  .newsletter-card {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 18px;
+    background: var(--color-surface);
+    border: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
+    box-shadow: var(--shadow-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition:
+      opacity 380ms ease,
+      transform 380ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .newsletter-card.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .newsletter-card:hover,
+  .newsletter-card:focus-visible {
+    opacity: 1;
+    border-color: color-mix(in oklab, var(--color-border) 85%, transparent);
+    background: color-mix(in oklab, var(--color-surface) 98%, transparent);
+  }
+
+  .newsletter-card:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-text) 18%, transparent);
+    outline-offset: 2px;
+  }
+
+  .newsletter-copy {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.2rem 0.4rem;
+    min-width: 0;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    color: var(--color-text-soft);
+  }
+
+  .newsletter-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+    color: var(--color-text);
+  }
+
+  .newsletter-brand svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
+  }
+
+  .brand-mark {
+    font-family: 'Inter', var(--font-family-sans);
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-tld {
+    color: #6b6b76;
+  }
+
+  .newsletter-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    color: color-mix(in oklab, var(--color-text) 60%, transparent);
+    transition: transform 180ms ease, color 180ms ease;
+  }
+
+  .newsletter-arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .newsletter-card:hover .newsletter-arrow,
+  .newsletter-card:focus-visible .newsletter-arrow {
+    color: #f6821f;
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 768px) {
+    .newsletter-card {
+      border-radius: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .newsletter-card {
+      transition: none;
+    }
+
+    .newsletter-arrow {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const revealNewsletter = () => {
+    const card = document.querySelector('.newsletter-card');
+    if (!card) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.setTimeout(() => card.classList.add('is-visible'), reduced ? 0 : 1000);
+  };
+
+  if (document.readyState === 'complete') {
+    revealNewsletter();
+  } else {
+    window.addEventListener('load', revealNewsletter, { once: true });
+  }
+</script>

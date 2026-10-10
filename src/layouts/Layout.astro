@@ -1,6 +1,7 @@
 ---
 import Sidebar from '../components/Sidebar.astro';
 import Header from '../components/Header.astro';
+import NewsletterCard from '../components/NewsletterCard.astro';
 
 import '../styles/global.css'; 
 
@@ -30,6 +31,13 @@ const isContentPage =
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<title>{title}</title>
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    {homeMinimal && (
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
+      </>
+    )}
 
     <!-- Google Tag Manager -->
     <script>// @ts-nocheck
@@ -49,6 +57,7 @@ const isContentPage =
     <Header />
     <div class={`app-shell${homeMinimal ? ' home-minimal' : ''}${isContentPage ? ' content-only' : ''}${wide ? ' is-wide' : ''}`}>
       {!isContentPage && <Sidebar />}
+      {homeMinimal && <NewsletterCard />}
       {!homeMinimal && (
         <main class="content">
           {isContentPage && !hideContentBack && (
@@ -82,6 +91,8 @@ const isContentPage =
           'meta.baseCity': 'João Pessoa, Brasil',
           'footer.made': 'feito com ❤️ por Davi',
           'title.home': 'Início',
+          'newsletter.prompt': 'Assine minha newsletter',
+          'newsletter.aria': 'Assine a newsletter introducing.news (abre em nova aba)',
           'title.1minuto': 'Lista de Espera',
           'title.contact': 'Contato',
           'title.resources': 'Recursos',
@@ -148,6 +159,8 @@ const isContentPage =
           'meta.baseCity': 'João Pessoa, Brazil',
           'footer.made': 'made with ❤️ by Davi',
           'title.home': 'Home',
+          'newsletter.prompt': 'Subscribe to my newsletter',
+          'newsletter.aria': 'Subscribe to the introducing.news newsletter (opens in a new tab)',
           'title.1minuto': 'Waitlist',
           'title.contact': 'Contact',
           'title.resources': 'Resources',
